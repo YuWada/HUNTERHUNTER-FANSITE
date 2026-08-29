@@ -1,13 +1,12 @@
 import createGlobe from './vendor/cobe/cobe.esm.js';
 
-const canvas = document.querySelector('#hunter-globe');
+let canvas = document.querySelector('#hunter-globe');
 const stage = canvas?.closest('.globe-stage');
 
 if (canvas && stage) {
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let phi = 3.2;
-  let visible = true;
   let globe;
+  let visible = true;
 
   const markers = [
     { location: [35.6762, 139.6503], size: 0.055 },
@@ -30,11 +29,21 @@ if (canvas && stage) {
     const size = Math.max(320, Math.round(rect.width));
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    // サイズが同じなら再生成しない（ResizeObserverの無限ループによる停止を防ぐ）
-    if (currentSize === size) return;
+    if (Math.abs(currentSize - size) < 5) return; 
     currentSize = size;
+    
+    // WebGLコンテキストが破棄されたcanvasを再利用するとエラーになるため、DOMごと作り直す
+    if (globe) {
+      globe.destroy();
+      if (canvas) canvas.remove();
+      canvas = document.createElement('canvas');
+      canvas.id = 'hunter-globe';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.style.display = 'block';
+      stage.appendChild(canvas);
+    }
 
-    globe?.destroy();
     globe = createGlobe(canvas, {
       devicePixelRatio: dpr,
       width: size * dpr,
@@ -58,7 +67,7 @@ if (canvas && stage) {
       markers,
       arcs,
       onRender: state => {
-        phi += 0.003;
+        if (visible) phi += 0.003;
         state.phi = phi;
       },
     });
