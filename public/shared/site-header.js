@@ -1,5 +1,22 @@
 (() => {
   const script = document.currentScript;
+  if (!script) return;
+
+  const faviconUrl = new URL("./favicon.svg", script.src).href;
+  const faviconLinks = document.querySelectorAll('link[rel~="icon"]');
+  if (faviconLinks.length) {
+    faviconLinks.forEach((link) => {
+      link.href = faviconUrl;
+      link.type = "image/svg+xml";
+    });
+  } else {
+    const favicon = document.createElement("link");
+    favicon.rel = "icon";
+    favicon.type = "image/svg+xml";
+    favicon.href = faviconUrl;
+    document.head.append(favicon);
+  }
+
   const gaMeasurementId = "G-FJMHVLKN37";
   if (!window.__dennoGaLoaded) {
     window.__dennoGaLoaded = true;
@@ -14,7 +31,7 @@
     document.head.append(gaScript);
   }
 
-  if (!script || document.querySelector(".denno-site-header")) return;
+  if (document.querySelector(".denno-site-header")) return;
 
   const siteRoot = new URL("../", script.src);
   const pageUrl = new URL(window.location.href);

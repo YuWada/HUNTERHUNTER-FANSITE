@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parent
 PUBLIC = ROOT / "public"
 CSS = PUBLIC / "shared" / "site-header.css"
 JS = PUBLIC / "shared" / "site-header.js"
+FAVICON = PUBLIC / "shared" / "favicon.svg"
 MARKER = "data-denno-shared-header"
 
 def relative_url(target: Path, page: Path) -> str:
@@ -21,6 +22,7 @@ def inject(page: Path) -> bool:
         return False
         
     assets = (
+        f'  <link rel="icon" type="image/svg+xml" href="{relative_url(FAVICON, page)}">\n'
         f'  <link rel="stylesheet" href="{relative_url(CSS, page)}" {MARKER}>\n'
         f'  <script defer src="{relative_url(JS, page)}" {MARKER}></script>\n'
     )
