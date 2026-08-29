@@ -1,5 +1,5 @@
 :root {
-  --denno-header-height: 78px;
+  --denno-header-height: 46px;
 }
 
 .denno-site-header,
@@ -27,9 +27,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
+  gap: 22px;
   width: min(1180px, calc(100% - 48px));
-  min-height: 77px;
+  min-height: 45px;
   margin: 0 auto;
 }
 
@@ -37,7 +37,7 @@
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: 13px;
+  gap: 9px;
   color: inherit;
   text-decoration: none;
 }
@@ -50,12 +50,12 @@
 .denno-brand-mark {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 29px;
+  height: 29px;
   border: 1px solid rgba(185, 229, 45, .72);
   border-radius: 50%;
   color: #b9e52d;
-  font: 900 12px/1 Arial, sans-serif;
+  font: 900 9px/1 Arial, sans-serif;
   letter-spacing: -.08em;
   box-shadow: inset 0 0 0 5px rgba(185, 229, 45, .06), 0 0 22px rgba(185, 229, 45, .06);
 }
@@ -63,13 +63,13 @@
 .denno-brand-copy {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
   white-space: nowrap;
 }
 
 .denno-brand-title {
   color: #f3f0e4;
-  font-size: 19px;
+  font-size: 15px;
   font-weight: 900;
   line-height: 1;
   letter-spacing: .1em;
@@ -77,7 +77,7 @@
 
 .denno-brand-subtitle {
   color: #6f746b;
-  font-size: 8px;
+  font-size: 6px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: .2em;
@@ -95,8 +95,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
-  padding: 0 12px;
+  min-height: 28px;
+  padding: 0 10px;
   border: 1px solid transparent;
   border-radius: 2px;
   color: #b7baaf;
@@ -164,28 +164,31 @@ body.denno-has-shared-header .md-header {
 
 @media (max-width: 720px) {
   .denno-header-inner {
-    display: block;
-    padding: 12px 0 9px;
+    display: flex;
+    gap: 12px;
+    min-height: 47px;
+    padding: 0;
   }
 
   .denno-brand-mark {
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 28px;
   }
 
   .denno-brand-title {
-    font-size: 17px;
+    font-size: 14px;
   }
 
   .denno-brand-subtitle {
-    font-size: 7px;
+    font-size: 5px;
   }
 
   .denno-global-nav {
+    flex: 1 1 auto;
     justify-content: flex-start;
     gap: 3px;
-    margin-top: 10px;
-    padding-bottom: 2px;
+    margin: 0;
+    padding: 0;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -195,8 +198,8 @@ body.denno-has-shared-header .md-header {
   }
 
   .denno-global-nav a {
-    min-height: 31px;
-    padding-inline: 9px;
+    min-height: 27px;
+    padding-inline: 8px;
   }
 }
 
