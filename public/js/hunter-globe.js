@@ -68,7 +68,7 @@ if (canvas && stage) {
       markers,
       arcs,
       onRender: state => {
-        if (visible) phi += 0.003;
+        phi += 0.003;
         state.phi = phi;
       },
     });
