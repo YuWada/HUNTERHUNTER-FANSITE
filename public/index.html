@@ -82,23 +82,40 @@
     }
     .hero::before {
       position: absolute;
+      z-index: 0;
       inset: 0;
       content: "";
       background:
-        linear-gradient(90deg, rgba(5, 6, 5, .97) 0%, rgba(5, 6, 5, .81) 35%, rgba(5, 6, 5, .14) 76%),
+        linear-gradient(90deg, rgba(5, 6, 5, .98) 0%, rgba(5, 6, 5, .88) 35%, rgba(5, 6, 5, .38) 76%),
         linear-gradient(0deg, #080907 0%, transparent 33%),
         url("./assets/hunter-archive-hero.png") 66% center / cover no-repeat;
       transform: scale(1.015);
     }
     .hero::after {
       position: absolute;
+      z-index: 2;
       inset: 0;
       content: "";
       opacity: .12;
       background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,.08) 4px);
       pointer-events: none;
     }
-    .hero-inner { position: relative; z-index: 1; width: 100%; padding: 190px 0 92px; }
+    .globe-stage {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      right: max(-170px, -8vw);
+      width: min(70vw, 900px);
+      aspect-ratio: 1;
+      opacity: .7;
+      transform: translateY(-47%);
+      filter: drop-shadow(0 0 55px rgba(185, 229, 45, .13));
+      pointer-events: none;
+      -webkit-mask-image: radial-gradient(circle, #000 42%, rgba(0,0,0,.82) 63%, transparent 74%);
+      mask-image: radial-gradient(circle, #000 42%, rgba(0,0,0,.82) 63%, transparent 74%);
+    }
+    #hunter-globe { display: block; width: 100%; height: 100%; }
+    .hero-inner { position: relative; z-index: 3; width: 100%; padding: 190px 0 92px; }
     .coordinate { margin-bottom: 28px; color: var(--acid); font: 700 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .18em; }
     .coordinate::before { display: inline-block; width: 42px; height: 1px; margin: 0 12px 4px 0; background: currentColor; content: ""; }
     h1 { max-width: 760px; margin: 0; font-size: clamp(52px, 8.2vw, 104px); line-height: .98; letter-spacing: -.065em; }
@@ -110,11 +127,7 @@
     .hero-meta strong { display: block; font: 800 20px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
     .hero-meta span { display: block; margin-top: 7px; color: var(--subtle); font-size: 9px; letter-spacing: .16em; }
 
-    .main { padding: 106px 0 118px; }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 35px; }
-    .kicker { color: var(--acid); font: 700 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .17em; }
-    .section-head h2 { margin: 12px 0 0; font-size: clamp(34px, 5vw, 58px); line-height: 1.15; letter-spacing: -.045em; }
-    .section-head p { max-width: 430px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.9; }
+    .main { padding: 106px 0 64px; }
     .feature-grid { display: grid; grid-template-columns: 1.14fr .86fr; gap: 20px; }
     .feature {
       position: relative;
@@ -192,7 +205,6 @@
       .feature-grid { grid-template-columns: 1fr; }
       .feature { min-height: 470px; }
       .feature--nen::after { top: 45px; }
-      .section-head { align-items: start; flex-direction: column; gap: 18px; }
     }
     @media (max-width: 680px) {
       .wrap { width: min(100% - 30px, 1180px); }
@@ -201,6 +213,7 @@
       .nav-links a, .unofficial { display: none; }
       .hero { min-height: 680px; }
       .hero::before { background-position: 61% center; }
+      .globe-stage { right: -235px; width: 660px; opacity: .48; }
       .hero-inner { padding: 142px 0 68px; }
       h1 { font-size: clamp(48px, 16vw, 70px); }
       .hero-lead { font-size: 15px; }
@@ -222,6 +235,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .feature, .feature::before { transition: none; }
+      .globe-stage { opacity: .45; }
     }
   </style>
 </head>
@@ -242,6 +256,9 @@
 
   <main>
     <section class="hero">
+      <div class="globe-stage" aria-hidden="true">
+        <canvas id="hunter-globe"></canvas>
+      </div>
       <div class="wrap hero-inner">
         <div class="coordinate">ARCHIVE // 001 · ACCESS GRANTED</div>
         <h1>世界を、<br>もっと深く<em>狩る。</em></h1>
@@ -255,10 +272,6 @@
     </section>
 
     <section class="wrap main" id="contents">
-      <div class="section-head">
-        <div><div class="kicker">// ACTIVE CONTENTS</div><h2>探索をはじめる</h2></div>
-        <p>情報を追うもよし、自分の系統を探るもよし。現在公開中のコンテンツは、すべて新しいタブで開きます。</p>
-      </div>
       <div class="feature-grid">
         <a class="feature feature--data" href="./hunterdata/" target="_blank" rel="noopener noreferrer">
           <span class="feature-number">INDEX 01</span>
@@ -282,10 +295,6 @@
     </section>
 
     <section class="wrap upcoming" id="coming-soon">
-      <div class="section-head">
-        <div><div class="kicker">// UNDER DEVELOPMENT</div><h2>次なる挑戦</h2></div>
-        <p>さらなるコンテンツを鋭意制作中。公開まで、もうしばらくお待ちください。</p>
-      </div>
       <div class="upcoming-grid">
         <article class="upcoming-card" data-number="03">
           <div class="coming-badge">COMING SOON / 工事中</div>
@@ -308,5 +317,6 @@
       <p class="disclaimer">本サイトおよび掲載コンテンツは『HUNTER×HUNTER』を愛する個人が制作した非公式のファンメイドサイトです。原作者・出版社・アニメ制作会社・その他の権利者とは一切関係なく、公式の商品・サービスではありません。</p>
     </div>
   </footer>
+  <script type="module" src="./js/hunter-globe.js"></script>
 </body>
 </html>
