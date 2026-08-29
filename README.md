@@ -6,8 +6,13 @@
 
 - `/public/` — Cloudflare PagesでWeb公開するファイル
   - `/public/index.html` — ファンサイトのトップページ
+  - `/public/hunterdata/` — HUNTER×HUNTER 神眼データベース
   - `/public/huntermizumi/` — 念能力 系統診断
+  - `/public/hunterkeisai/` — ジャンプ掲載号リスト
+  - `/public/huntermeigen/` — 俺でなきゃ見逃しちゃう名台詞集
+  - `/public/shared/` — 全ページ共通ヘッダー、ナビゲーション、GA4設定
 - `/private/` — Git管理するがWeb公開しない資料・下書き
+- `/inject_shared_header.py` — 全公開HTMLに共通ヘッダーを登録するサイト共通処理
 
 このリポジトリの `main` ブランチへのプッシュを、Cloudflare Pagesの本番公開へ自動反映します。Cloudflare PagesのBuild output directoryは `public` に設定しています。
 

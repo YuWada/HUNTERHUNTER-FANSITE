@@ -1,13 +1,18 @@
 import os
 import re
+from pathlib import Path
+
+# 旧方式の保管用スクリプトです。現在のGA4は public/shared/site-header.js から読み込みます。
+# 通常は実行せず、過去の処理を確認する場合だけ参照してください。
 
 # =============== 設定 ===============
 # Googleアナリティクスで取得した「測定ID（G-XXXXXXXXXX）」をここに設定してください。
-MEASUREMENT_ID = 'G-XXXXXXXXXX' 
+MEASUREMENT_ID = 'G-FJMHVLKN37'
 # ====================================
 
-# HTMLファイルが置かれているディレクトリ
-PUBLIC_DIR = os.path.join(os.path.dirname(__file__), 'public')
+# 移動後も参照先を解決できるよう、プロジェクトルートからpublicを指定します。
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PUBLIC_DIR = str(PROJECT_ROOT / 'public')
 
 def get_ga_snippet(measurement_id):
     # Google Analytics 4 (GA4) の標準的なタグスニペット
