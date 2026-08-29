@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ラブリーハンターライター（天使のハンター文字自動筆記）</title>
-  <script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/build/kuromoji.js"></script>
+  <script src="../js/kuromoji/kuromoji.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
@@ -425,7 +425,7 @@
 
     let tokenizer = null;
 
-    kuromoji.builder({ dicPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict" }).build(function (err, _tokenizer) {
+    kuromoji.builder({ dicPath: "../js/kuromoji/dict" }).build(function (err, _tokenizer) {
       if (err) {
         document.getElementById("loading").innerText = "辞書の読み込みに失敗しました。";
         console.error(err);
