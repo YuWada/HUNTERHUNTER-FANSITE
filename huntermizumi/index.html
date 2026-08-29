@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUNTER×HUNTER 念系統 心理診断 | あなたのオーラはどの系統？</title>
+  <meta name="description" content="ヒソカのオーラ別性格分析に基づいた15問の心理クイズ！あなたの念系統（強化・変化・放出・具現化・操作・特質）やオリジナル念能力、六性図、似ているキャラクターを診断します。">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♦</text></svg>">
+</head>
+<body>
+
+  <!-- 背景アンビエントオーラ -->
+  <div class="bg-ambient-aura">
+    <div class="aura-orb orb-1"></div>
+    <div class="aura-orb orb-2"></div>
+    <div class="aura-orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="brand-badge">HUNTER×HUNTER NEN DIAGNOSIS</div>
+      <div class="header-controls">
+        <button id="btn-sound-toggle" class="btn-control" aria-label="サウンド切り替え">🔊 サウンド ON</button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         1. スタート画面 (Intro Screen)
+         ==================================================================== -->
+    <section id="screen-intro" class="screen active">
+      <div class="intro-card">
+        <div class="hunter-symbol">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+        </div>
+
+        <h1 class="main-title">念能力 系統診断</h1>
+        <p class="sub-title">HISOKA'S AURA PERSONALITY TEST</p>
+
+        <div class="intro-quote-box">
+          <div class="quote-speaker">ヒソカ＝モロウ</div>
+          <div class="quote-text">
+            「念能力はね…性格と密接に関係しているんだ♦<br>
+            ボクの独断と偏見によるオーラ別性格分析…試してみるかい？♣」
+          </div>
+        </div>
+
+        <p class="intro-desc">
+          日常の選択や対人関係の葛藤、プレッシャー下の心理判断を問う15問の深層心理テスト。全60問の心理プールと独自の動的適応アルゴリズムにより、あなたの無意識に眠る真の念系統（強化・変化・放出・具現化・操作・特質）を精密に鑑定します。
+        </p>
+
+        <!-- 6系統チップス -->
+        <div class="nen-system-chips">
+          <span class="nen-chip enh">強化系</span>
+          <span class="nen-chip trn">変化系</span>
+          <span class="nen-chip emi">放出系</span>
+          <span class="nen-chip cnj">具現化系</span>
+          <span class="nen-chip mnp">操作系</span>
+          <span class="nen-chip spc">特質系</span>
+        </div>
+
+        <button id="btn-start" class="btn-primary">
+          <span>水見式 診断を始める</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42 5.43 5.43H5v2z"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         2. クイズ画面 (Quiz Screen)
+         ==================================================================== -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-header">
+        <div class="quiz-progress-bar">
+          <div id="quiz-progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="quiz-meta-row">
+          <span id="quiz-q-number" class="quiz-number">QUESTION 1 / 15</span>
+          <span id="quiz-category" class="quiz-category-tag">危機対応</span>
+        </div>
+      </div>
+
+      <div id="quiz-card" class="quiz-card">
+        <h2 id="quiz-question-text" class="question-text">
+          目の前に困難な課題やピンチが立ちはだかったとき、あなたはどう対処する？
+        </h2>
+
+        <div id="quiz-options-container" class="options-list">
+          <!-- 選択肢ボタンがJSから動的に挿入されます -->
+        </div>
+
+        <div class="quiz-footer">
+          <button id="btn-prev-q" class="btn-secondary" style="visibility: hidden;">
+            ← 前の質問に戻る
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. 水見式演出画面 (Mizumishiki Screen)
+         ==================================================================== -->
+    <section id="screen-mizumishiki" class="screen">
+      <div class="mizumishiki-container">
+        <div id="mizumishiki-view">
+          <!-- 水見式のグラスと葉っぱ、オーラ演出がJSから描画されます -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4. 診断結果画面 (Result Screen)
+         ==================================================================== -->
+    <section id="screen-result" class="screen">
+      <div class="result-card">
+        <!-- 系統メイン見出し -->
+        <div class="result-header">
+          <span id="res-aura-badge" class="res-aura-badge">強化系 (Enhancement)</span>
+          <div class="res-type-title-box">
+            <div id="res-type-ruby" class="res-ruby">きょうかけい</div>
+            <h2 id="res-type-title" class="res-type-title">強化系</h2>
+          </div>
+          <div id="res-hisoka-word" class="res-hisoka-quote">ヒソカのオーラ別性格分析：『単純で一途』♦</div>
+          <div id="res-summary" class="res-summary-box">自分の意志に正直で、真っ直ぐに突き進む不屈のファイター</div>
+        </div>
+
+        <!-- 六性図レーダーチャート & 性格詳細グリッド -->
+        <div class="result-grid-top">
+          <div class="chart-card-box">
+            <h3 class="section-label">六性図 オーラ適性分布</h3>
+            <div class="hex-canvas-wrapper">
+              <canvas id="res-hex-canvas" width="320" height="320"></canvas>
+            </div>
+          </div>
+
+          <div class="desc-card-box">
+            <h3 class="section-label">性格・オーラ特性分析</h3>
+            <p id="res-description" class="personality-desc">
+              解説テキストがここに入ります。
+            </p>
+
+            <div class="traits-columns">
+              <div class="traits-box strengths">
+                <h5>【主な長所】</h5>
+                <ul id="res-strengths"></ul>
+              </div>
+              <div class="traits-box weaknesses">
+                <h5>【注意点・短所】</h5>
+                <ul id="res-weaknesses"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- オリジナル念能力提案 -->
+        <div class="original-ability-section">
+          <h3 class="section-label">潜在オーラから導き出されたオリジナル念能力</h3>
+          <div id="res-original-ability"></div>
+        </div>
+
+        <!-- 同じ系統のキャラクター -->
+        <div class="characters-section">
+          <h3 class="section-label">あなたと同じ念系統のキャラクター</h3>
+          <div id="res-characters-list" class="characters-grid"></div>
+        </div>
+
+        <!-- 相性分析 -->
+        <div class="compatibility-section">
+          <h3 class="section-label">他系統とのオーラ相性</h3>
+          <div class="comp-grid">
+            <div id="res-comp-best" class="comp-card"></div>
+            <div id="res-comp-worst" class="comp-card"></div>
+          </div>
+        </div>
+
+        <!-- シェア・再診断アクション -->
+        <div class="result-actions">
+          <button id="btn-share-x" class="btn-share-x">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            <span>結果を X でシェアする</span>
+          </button>
+          <button id="btn-copy-result" class="btn-copy">
+            <span>📋 結果をコピー</span>
+          </button>
+          <button id="btn-retry" class="btn-retry">
+            <span>🔄 もう一度診断する</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="app-footer">
+      <p>※本コンテンツは『HUNTER×HUNTER』の作中設定をモチーフに、個人が制作した非公式のファンメイド診断です。原作者・出版社・アニメ制作会社・その他の権利者とは一切関係なく、公式の商品・サービスではありません。</p>
+    </footer>
+  </div>
+
+  <!-- スクリプト読み込み -->
+  <script src="js/nenData.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

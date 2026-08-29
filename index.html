@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="『HUNTER×HUNTER』をテーマにした個人制作の非公式ファンサイトです。">
+  <title>HUNTER×HUNTER FAN SITE | 非公式ファンサイト</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a0b0c;
+      --panel: #151719;
+      --text: #f3f0e7;
+      --muted: #a8aaa6;
+      --accent: #efc83d;
+      --red: #e03a31;
+      --line: rgba(255, 255, 255, .13);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 80% 10%, rgba(224, 58, 49, .17), transparent 32rem),
+        radial-gradient(circle at 10% 65%, rgba(239, 200, 61, .09), transparent 28rem),
+        var(--bg);
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    }
+
+    .wrap { width: min(1040px, calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo { font-weight: 900; letter-spacing: .09em; }
+    .logo span { color: var(--red); }
+    .status { color: var(--muted); font-size: 11px; letter-spacing: .15em; }
+
+    .hero { padding: 92px 0 72px; }
+    .eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .2em; }
+    h1 { margin: 16px 0 22px; font-size: clamp(42px, 8vw, 82px); line-height: 1.02; letter-spacing: -.05em; }
+    .lead { max-width: 690px; margin: 0; color: #cfcec7; font-size: clamp(17px, 2vw, 21px); line-height: 1.9; }
+
+    .contents { padding: 24px 0 100px; }
+    .section-label { margin-bottom: 22px; color: var(--muted); font-size: 12px; letter-spacing: .2em; }
+
+    .card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 34px;
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .025));
+    }
+
+    .tag { color: #79c965; font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+    h2 { margin: 10px 0 12px; font-size: clamp(27px, 4vw, 42px); }
+    .card p { margin: 0; color: var(--muted); line-height: 1.8; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 190px;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 999px;
+      color: #111;
+      background: var(--accent);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    footer { padding: 34px 0 52px; border-top: 1px solid var(--line); color: #858781; font-size: 12px; line-height: 1.8; }
+
+    @media (max-width: 700px) {
+      .hero { padding: 64px 0 54px; }
+      .card { grid-template-columns: 1fr; padding: 26px; }
+      .button { width: 100%; }
+      .status { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">HUNTER×HUNTER <span>FAN SITE</span></div>
+      <div class="status">UNOFFICIAL / FAN-MADE</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">WELCOME, HUNTERS.</div>
+        <h1>好きだから、<br>もっと楽しむ。</h1>
+        <p class="lead">『HUNTER×HUNTER』の魅力的な世界観を、診断や読み物などのファンメイドコンテンツで楽しむための非公式サイトです。コンテンツは順次追加予定です。</p>
+      </section>
+
+      <section class="contents">
+        <div class="section-label">CONTENTS</div>
+        <article class="card">
+          <div>
+            <div class="tag">15 QUESTIONS / PERSONALITY TEST</div>
+            <h2>念能力 系統診断</h2>
+            <p>ヒソカのオーラ別性格分析をモチーフにした心理診断。15問の選択から、あなたの念系統を導き出します。</p>
+          </div>
+          <a class="button" href="./huntermizumi/">水見式を試す →</a>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      本サイトおよび掲載コンテンツは『HUNTER×HUNTER』を愛する個人が制作した非公式のファンメイドサイトです。原作者・出版社・アニメ制作会社・その他の権利者とは一切関係なく、公式の商品・サービスではありません。
+    </footer>
+  </div>
+</body>
+</html>
