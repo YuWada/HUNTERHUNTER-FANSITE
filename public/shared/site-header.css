@@ -1,0 +1,208 @@
+:root {
+  --denno-header-height: 78px;
+}
+
+.denno-site-header,
+.denno-site-header * {
+  box-sizing: border-box;
+}
+
+.denno-site-header {
+  position: sticky;
+  z-index: 10000;
+  top: 0;
+  width: 100%;
+  border-bottom: 1px solid rgba(231, 232, 216, .14);
+  color: #f3f0e4;
+  background:
+    linear-gradient(90deg, rgba(185, 229, 45, .04), transparent 32%),
+    rgba(6, 7, 6, .94);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .28);
+  font-family: Inter, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.denno-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  width: min(1180px, calc(100% - 48px));
+  min-height: 77px;
+  margin: 0 auto;
+}
+
+.denno-brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 13px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.denno-brand:hover,
+.denno-brand:focus-visible {
+  color: inherit;
+}
+
+.denno-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(185, 229, 45, .72);
+  border-radius: 50%;
+  color: #b9e52d;
+  font: 900 12px/1 Arial, sans-serif;
+  letter-spacing: -.08em;
+  box-shadow: inset 0 0 0 5px rgba(185, 229, 45, .06), 0 0 22px rgba(185, 229, 45, .06);
+}
+
+.denno-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.denno-brand-title {
+  color: #f3f0e4;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .1em;
+}
+
+.denno-brand-subtitle {
+  color: #6f746b;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .2em;
+}
+
+.denno-global-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  min-width: 0;
+}
+
+.denno-global-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: #b7baaf;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .05em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.denno-global-nav a:hover,
+.denno-global-nav a:focus-visible,
+.denno-global-nav a[aria-current="page"] {
+  border-color: rgba(185, 229, 45, .24);
+  color: #d8f36d;
+  background: rgba(185, 229, 45, .065);
+  outline: none;
+}
+
+.denno-global-nav a::after {
+  position: absolute;
+  right: 12px;
+  bottom: 4px;
+  left: 12px;
+  height: 1px;
+  background: #b9e52d;
+  content: "";
+  opacity: 0;
+  transform: scaleX(.3);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.denno-global-nav a:hover::after,
+.denno-global-nav a:focus-visible::after,
+.denno-global-nav a[aria-current="page"]::after {
+  opacity: .8;
+  transform: scaleX(1);
+}
+
+body.denno-has-shared-header > header.site-header {
+  display: none !important;
+}
+
+body.denno-has-shared-header.denno-hide-legacy-header {
+  padding-top: 0 !important;
+}
+
+body.denno-has-shared-header .md-header {
+  top: var(--denno-header-height) !important;
+}
+
+@media (max-width: 900px) {
+  .denno-header-inner {
+    gap: 18px;
+    width: min(100% - 30px, 1180px);
+  }
+
+  .denno-global-nav a {
+    padding-inline: 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 720px) {
+  .denno-header-inner {
+    display: block;
+    padding: 12px 0 9px;
+  }
+
+  .denno-brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .denno-brand-title {
+    font-size: 17px;
+  }
+
+  .denno-brand-subtitle {
+    font-size: 7px;
+  }
+
+  .denno-global-nav {
+    justify-content: flex-start;
+    gap: 3px;
+    margin-top: 10px;
+    padding-bottom: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .denno-global-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .denno-global-nav a {
+    min-height: 31px;
+    padding-inline: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .denno-global-nav a,
+  .denno-global-nav a::after {
+    transition: none;
+  }
+}

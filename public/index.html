@@ -124,11 +124,6 @@
     .hero-lead { max-width: 610px; margin: 31px 0 0; color: #c4c6bd; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.95; }
     .hero-lead span { display: block; }
     .hero-lead strong { color: var(--text); font-weight: 900; }
-    .hero-meta { display: grid; grid-template-columns: repeat(3, max-content); gap: 0; margin-top: 54px; }
-    .hero-meta div { min-width: 130px; padding: 0 28px; border-left: 1px solid var(--line-strong); }
-    .hero-meta div:first-child { padding-left: 0; border-left: 0; }
-    .hero-meta strong { display: block; font: 800 20px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .hero-meta span { display: block; margin-top: 7px; color: var(--subtle); font-size: 9px; letter-spacing: .16em; }
 
     .main { padding: 106px 0 64px; }
     .feature-grid { display: grid; grid-template-columns: 1.14fr .86fr; gap: 20px; }
@@ -252,10 +247,6 @@
       .hero-inner { padding: 142px 0 68px; }
       h1 { font-size: clamp(39px, 12vw, 54px); }
       .hero-lead { font-size: 15px; }
-      .hero-meta { grid-template-columns: repeat(3, 1fr); margin-top: 42px; }
-      .hero-meta div { min-width: 0; padding: 0 13px; }
-      .hero-meta strong { font-size: 15px; }
-      .hero-meta span { font-size: 7px; }
       .main { padding: 76px 0 84px; }
       .feature { min-height: 500px; }
       .feature-content { padding: 27px; }
@@ -273,16 +264,8 @@
       .globe-stage { opacity: .45; }
     }
   </style>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FJMHVLKN37"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-FJMHVLKN37');
-    </script>
+  <link rel="stylesheet" href="shared/site-header.css" data-denno-shared-header>
+  <script defer src="shared/site-header.js" data-denno-shared-header></script>
 </head>
 <body>
   <header class="site-header">
@@ -311,11 +294,6 @@
         <div class="coordinate">ARCHIVE // 001 · ACCESS GRANTED</div>
         <h1>H×Hの世界を、<br>もっと深く<em>狩る。</em></h1>
         <p class="hero-lead">調べる。試す。見つける。『HUNTER×HUNTER』の底知れない世界を、<span><strong>もっと深くHUNTせよ。</strong> 非公式ファンサイト。</span></p>
-        <div class="hero-meta" aria-label="サイトコンテンツ概要">
-          <div><strong>04</strong><span>CONTENTS LIVE</span></div>
-          <div><strong>01</strong><span>COMING SOON</span></div>
-          <div><strong>∞</strong><span>TO EXPLORE</span></div>
-        </div>
       </div>
     </section>
 
