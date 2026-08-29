@@ -24,6 +24,7 @@ if (canvas && stage) {
   ];
 
   let currentSize = 0;
+  let animationFrame; // アニメーションループ用の変数
   
   const render = () => {
     const rect = stage.getBoundingClientRect();
@@ -33,9 +34,9 @@ if (canvas && stage) {
     if (Math.abs(currentSize - size) < 5) return; 
     currentSize = size;
     
-    // WebGLコンテキストが破棄されたcanvasを再利用するとエラーになるため、DOMごと作り直す
     if (globe) {
       globe.destroy();
+      cancelAnimationFrame(animationFrame); // 既存のループを停止
       if (canvas) canvas.remove();
       canvas = document.createElement('canvas');
       canvas.id = 'hunter-globe';
@@ -45,6 +46,7 @@ if (canvas && stage) {
       stage.appendChild(canvas);
     }
 
+    // Vanilla JSのCobeには onRender が存在しないため、オプションから外す
     globe = createGlobe(canvas, {
       devicePixelRatio: dpr,
       width: size * dpr,
@@ -67,11 +69,17 @@ if (canvas && stage) {
       scale: 1.02,
       markers,
       arcs,
-      onRender: state => {
-        phi += 0.003;
-        state.phi = phi;
-      },
     });
+
+    // 自分で requestAnimationFrame を回して update を呼ぶのが Vanilla JS での正しいアニメーション手法
+    const loop = () => {
+      if (visible) {
+        phi += 0.003;
+        if (globe) globe.update({ phi });
+      }
+      animationFrame = requestAnimationFrame(loop);
+    };
+    loop();
   };
 
   let resizeTimer;
