@@ -189,11 +189,17 @@
     }
     .feature--moji::after {
       position: absolute;
-      top: 34px;
-      right: 28px;
-      color: rgba(233,69,96,.2);
-      font: 900 60px/1 "Yu Gothic", sans-serif;
-      content: "文字";
+      top: 24px;
+      right: 24px;
+      width: 196px;
+      height: 108px;
+      background:
+        url("./huntermoji/MY_CLEAN_IMAGES/も.svg") left center / 102px 102px no-repeat,
+        url("./huntermoji/MY_CLEAN_IMAGES/じ.svg") right center / 102px 102px no-repeat;
+      content: "";
+      opacity: .7;
+      filter: drop-shadow(0 0 18px rgba(233,69,96,.25));
+      transform: rotate(-3deg);
     }
     .feature--moji .feature-status { color: #f06a82; }
     .feature--moji .feature-status::before { background: currentColor; box-shadow: 0 0 12px currentColor; }
@@ -213,6 +219,23 @@
       font: 900 130px/1 Georgia, serif;
       content: "“";
     }
+    .feature--quiz::before {
+      background:
+        linear-gradient(180deg, rgba(8,9,7,.08), rgba(8,9,7,.96) 78%),
+        repeating-linear-gradient(120deg, rgba(215,173,74,.07) 0 1px, transparent 1px 28px),
+        radial-gradient(circle at 76% 22%, rgba(215,173,74,.24), transparent 12rem),
+        linear-gradient(145deg, #1d1a10, #0b0d0b 68%);
+    }
+    .feature--quiz::after {
+      position: absolute;
+      top: 34px;
+      right: 30px;
+      color: rgba(215,173,74,.22);
+      font: 900 72px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      content: "5択";
+    }
+    .feature--quiz .feature-status { color: var(--gold); }
+    .feature--quiz .feature-status::before { background: currentColor; box-shadow: 0 0 12px currentColor; }
     .feature-content { position: relative; z-index: 1; align-self: flex-end; width: 100%; padding: 28px; }
     .feature-number { position: absolute; top: 22px; left: 26px; z-index: 2; color: rgba(255,255,255,.26); font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
     .feature-status { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; color: var(--acid); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
@@ -220,26 +243,42 @@
     .feature h3 { max-width: 520px; margin: 0; font-size: clamp(28px, 2.8vw, 38px); line-height: 1.12; letter-spacing: -.04em; }
     .feature--nen h3 { font-size: clamp(26px, 2.6vw, 34px); }
     .feature p { display: -webkit-box; margin: 10px 0 0; overflow: hidden; color: #b6b9ae; font-size: 13px; line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-    .feature-action { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); color: #eeefe8; font-size: 11px; font-weight: 900; letter-spacing: .1em; }
-    .feature-action span:last-child { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--acid); font-size: 15px; }
-
-    .upcoming { padding: 0 0 78px; }
-    .upcoming-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-    .upcoming-card {
-      position: relative;
-      height: 260px;
-      overflow: hidden;
-      padding: 28px;
-      border: 1px solid var(--line);
-      background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.014));
+    .feature-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 44px;
+      margin-top: 14px;
+      padding: 4px 6px 4px 15px;
+      border: 1px solid rgba(185,229,45,.34);
+      border-radius: 4px;
+      color: #f4f7e9;
+      background: rgba(185,229,45,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      transition: background .2s ease, border-color .2s ease;
     }
-    .upcoming-card::after { position: absolute; right: -15px; bottom: -45px; color: rgba(255,255,255,.025); font: 900 180px/1 Arial, sans-serif; content: attr(data-number); }
-    .coming-badge { display: inline-flex; align-items: center; gap: 10px; color: var(--gold); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .15em; }
-    .coming-badge::before { width: 17px; height: 1px; background: currentColor; content: ""; }
-    .upcoming-card h3 { max-width: 480px; margin: 38px 0 10px; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.2; letter-spacing: -.035em; }
-    .upcoming-card p { position: relative; z-index: 1; max-width: 660px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
-    .rank-track { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
-    .rank-track span { padding: 7px 10px; border: 1px solid var(--line); color: #8f9389; font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .05em; }
+    .feature:hover .feature-action { border-color: rgba(185,229,45,.7); background: rgba(185,229,45,.14); }
+    .feature-action span:last-child {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(185,229,45,.38);
+      border-radius: 50%;
+      color: var(--acid);
+      background: rgba(185,229,45,.08);
+      font-size: 15px;
+      transition: transform .2s ease;
+    }
+    .feature:hover .feature-action span:last-child { transform: translateX(2px); }
+    .feature--quiz .feature-action { border-color: rgba(215,173,74,.34); color: #f2dfad; background: rgba(215,173,74,.08); }
+    .feature--quiz .feature-action span:last-child { border-color: rgba(215,173,74,.38); color: var(--gold); background: rgba(215,173,74,.08); }
+    .feature--quiz:hover .feature-action { border-color: rgba(215,173,74,.65); background: rgba(215,173,74,.13); }
 
     footer { border-top: 1px solid var(--line); }
     .footer-inner { display: grid; grid-template-columns: .7fr 1.3fr; gap: 70px; padding: 48px 0 58px; }
@@ -273,10 +312,6 @@
       .feature-content { padding: 24px; }
       .feature-number { top: 20px; left: 23px; }
       .feature--nen::after { right: 22px; width: 82px; height: 82px; }
-      .upcoming { padding-bottom: 64px; }
-      .upcoming-grid { grid-template-columns: 1fr; }
-      .upcoming-card { height: 280px; padding: 24px; }
-      .upcoming-card h3 { margin-top: 34px; }
       .footer-inner { grid-template-columns: 1fr; gap: 30px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -364,16 +399,14 @@
             <div class="feature-action"><span>名台詞集を見る</span><span aria-hidden="true">↗</span></div>
           </div>
         </a>
-      </div>
-    </section>
-
-    <section class="wrap upcoming" id="coming-soon">
-      <div class="upcoming-grid">
-        <article class="upcoming-card" data-number="06">
-          <div class="coming-badge">COMING SOON / 工事中</div>
-          <h3>HUNTER試験<br>ドキドキ5択クイズ</h3>
-          <p>試験会場に辿り着いたルーキーから、三つ星ハンターまで。知識と直感を試し、最高位の称号を目指す5択クイズ。</p>
-          <div class="rank-track" aria-label="クイズの称号例"><span>ROOKIE</span><span>LICENSED</span><span>★</span><span>★★</span><span>★★★</span></div>
+        <article class="feature feature--quiz" id="coming-soon">
+          <span class="feature-number">INDEX 06</span>
+          <div class="feature-content">
+            <div class="feature-status">QUIZ IN DEVELOPMENT</div>
+            <h3>HUNTER試験<br>ドキドキ5択クイズ</h3>
+            <p>試験会場に辿り着いたルーキーから、三つ星ハンターまで。知識と直感を試し、最高位の称号を目指す5択クイズ。</p>
+            <div class="feature-action"><span>工事中</span><span aria-hidden="true">…</span></div>
+          </div>
         </article>
       </div>
     </section>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 136" width="136" height="136">
+  <defs>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="136" y2="136" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffd700" />
+      <stop offset="50%" stop-color="#f5deb3" />
+      <stop offset="100%" stop-color="#daa520" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(8, 8) scale(1.2)">
+    
+    <path d="M59.5 21.4L73.2 21.3L75.1 20.9L76.8 21.3L79.2 22.9L77.8 28.8L66.9 40.6L35.6 70.1L36.9 70.9L46.8 71.2L65.9 71.2L76.2 71.5L77.6 72.1L78.6 73.0L79.0 74.0L79.1 75.4L78.8 77.7L77.1 78.4L63.0 78.6L36.0 78.6L21.9 78.1L20.4 76.5L21.3 71.9L32.1 60.4L63.3 30.5L62.1 29.2L52.1 28.8L33.1 28.8L22.8 28.5L20.8 27.3L21.2 21.2Z" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="miter" stroke-linecap="butt" />
+    <path d="M59.5 21.4L73.2 21.3L75.1 20.9L76.8 21.3L79.2 22.9L77.8 28.8L66.9 40.6L35.6 70.1L36.9 70.9L46.8 71.2L65.9 71.2L76.2 71.5L77.6 72.1L78.6 73.0L79.0 74.0L79.1 75.4L78.8 77.7L77.1 78.4L63.0 78.6L36.0 78.6L21.9 78.1L20.4 76.5L21.3 71.9L32.1 60.4L63.3 30.5L62.1 29.2L52.1 28.8L33.1 28.8L22.8 28.5L20.8 27.3L21.2 21.2Z" fill="url(#goldGrad)" fill-rule="evenodd" />
+  </g>
+</svg>
