@@ -44,7 +44,7 @@
     { key: "huntermizumi", label: "性格念診断", path: "huntermizumi/" },
     { key: "hunterkeisai", label: "WJ掲載号", path: "hunterkeisai/" },
     { key: "huntermoji", label: "天使H文字", path: "huntermoji/" },
-    { key: "huntermeigen", label: "俺名台詞", path: "huntermeigen/" },
+    { key: "huntermeigen", label: "オレ名台詞", path: "huntermeigen/" },
     { key: "coming-soon", label: "DDクイズ", path: "#coming-soon" },
   ];
 

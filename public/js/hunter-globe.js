@@ -52,7 +52,8 @@ if (canvas && stage) {
       markers,
       arcs,
       onRender: state => {
-        if (visible && !reducedMotion.matches) phi += 0.0012;
+        // デバッグ用: 強制的に回転させるように条件を外しました
+        phi += 0.003; // 少しだけ回転速度も上げてわかりやすくします
         state.phi = phi;
       },
     });
