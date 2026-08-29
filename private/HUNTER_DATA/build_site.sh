@@ -76,6 +76,10 @@ cat << 'CSS' > build_src/docs/stylesheets/extra.css
     color: var(--md-accent-fg-color);
     text-decoration: underline;
 }
+
+.md-copyright {
+    display: none !important;
+}
 CSS
 
 # MkDocs設定ファイルの作成（プレーン）

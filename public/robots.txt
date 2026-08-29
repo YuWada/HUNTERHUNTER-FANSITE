@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hunterhunter-fansite.pages.dev/sitemap.xml
