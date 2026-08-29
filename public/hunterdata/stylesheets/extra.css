@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&display=swap');
+
+:root {
+    --md-text-font: "Noto Sans JP", sans-serif;
+}
+.md-typeset h1, 
+.md-typeset h2, 
+.md-typeset h3 {
+    font-family: "Noto Serif JP", serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+.md-typeset h1 {
+    border-bottom: 2px solid var(--md-accent-fg-color);
+    padding-bottom: 0.3em;
+    margin-bottom: 1em;
+}
+.md-typeset h2 {
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+    padding-bottom: 0.3em;
+    margin-top: 1.5em;
+}
+.md-typeset p, .md-typeset li {
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+    color: var(--md-default-fg-color--light);
+}
+.md-typeset a {
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+.md-typeset a:hover {
+    color: var(--md-accent-fg-color);
+    text-decoration: underline;
+}

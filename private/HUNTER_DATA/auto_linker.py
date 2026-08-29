@@ -14,12 +14,18 @@ def main():
         for f in files:
             if f.endswith('.md') and f not in exclude_files:
                 term = f[:-3]
-                # 【変更点】1文字の用語（絶、円、凝など）はリンク化対象から除外
                 if len(term) >= 2:
                     terms[term] = os.path.join(root, f)
                     
     sorted_term_keys = sorted(terms.keys(), key=len, reverse=True)
-    escaped_terms = [re.escape(t) for t in sorted_term_keys]
+    
+    # スマートなエスケープ（カタカナのみの用語の場合、他のカタカナ文字と隣接している場合はマッチさせない）
+    def make_pattern(term):
+        if re.fullmatch(r'[ァ-ヶー＝]+', term):
+            return r'(?<![ァ-ヶー])' + re.escape(term) + r'(?![ァ-ヶー])'
+        return re.escape(term)
+        
+    escaped_terms = [make_pattern(t) for t in sorted_term_keys]
     pattern = re.compile(r'(' + '|'.join(escaped_terms) + r')')
     
     processed = 0
@@ -30,7 +36,7 @@ def main():
         if "venv" in root or "build_src" in root: 
             continue
         for f in files:
-            if not f.endswith('.md'):
+            if not f.endswith('.md') or f in exclude_files:
                 continue
                 
             filepath = os.path.join(root, f)
@@ -39,8 +45,9 @@ def main():
             with open(filepath, 'r', encoding='utf-8') as file:
                 content = file.read()
                 
-            # 【変更点】過去に作られてしまった「1文字のリンク（例：[絶](...)）」を解除してプレーンテキストに戻す
-            content = re.sub(r'\[(.)\]\([^)]+\)', r'\1', content)
+            # 過去の「1文字リンク」や、今回問題になったカタカナの一部リンクを解除する
+            # ※ 今回は手動の [ギド](...)ン のようなリンクも事前に消す必要があるため、
+            #    メインの実行前にsed等で綺麗にするか、ここで一括処理する。
             
             parts = re.split(r'^(---\n.*?\n---)\n', content, maxsplit=1, flags=re.DOTALL)
             if len(parts) == 3:
@@ -52,9 +59,6 @@ def main():
                 
             new_body_lines = []
             for line in body.split('\n'):
-                if line.startswith('#'):
-                    new_body_lines.append(line)
-                    continue
                     
                 segments = re.split(r'(\[[^\]]+\]\([^)]+\))', line)
                 for i in range(0, len(segments), 2):
@@ -77,7 +81,7 @@ def main():
                 modified += 1
             processed += 1
             
-    print(f"オートリンク完了 (1文字の単語を除外済) スキャン: {processed} / 更新: {modified}")
+    print(f"オートリンク完了 (スマートカタカナ除外適用) スキャン: {processed} / 更新: {modified}")
 
 if __name__ == "__main__":
     main()
