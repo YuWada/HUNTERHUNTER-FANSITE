@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 136" width="136" height="136">
+  <defs>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="136" y2="136" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffd700" />
+      <stop offset="50%" stop-color="#f5deb3" />
+      <stop offset="100%" stop-color="#daa520" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(8, 8) scale(1.2)">
+
+    <path d="M77.5 63.0L77.2 77.2L76.0 79.2L24.2 79.0L22.9 77.1L22.8 74.9L23.7 70.3L69.3 69.3L69.9 34.2L70.4 21.9L70.9 20.9L72.0 20.1L73.6 19.6L74.9 19.5L76.7 20.1L77.3 21.9L77.5 36.0Z" fill="none" stroke="#222222" stroke-width="3" stroke-linejoin="miter" stroke-linecap="butt" />
+    <path d="M77.5 63.0L77.2 77.2L76.0 79.2L24.2 79.0L22.9 77.1L22.8 74.9L23.7 70.3L69.3 69.3L69.9 34.2L70.4 21.9L70.9 20.9L72.0 20.1L73.6 19.6L74.9 19.5L76.7 20.1L77.3 21.9L77.5 36.0Z" fill="url(#goldGrad)" fill-rule="evenodd" />
+  </g>
+</svg>
