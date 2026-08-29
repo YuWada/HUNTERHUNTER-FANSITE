@@ -23,10 +23,16 @@ if (canvas && stage) {
     { from: [51.5072, -0.1276], to: [1.3521, 103.8198] },
   ];
 
+  let currentSize = 0;
+  
   const render = () => {
     const rect = stage.getBoundingClientRect();
     const size = Math.max(320, Math.round(rect.width));
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // サイズが同じなら再生成しない（ResizeObserverの無限ループによる停止を防ぐ）
+    if (currentSize === size) return;
+    currentSize = size;
 
     globe?.destroy();
     globe = createGlobe(canvas, {
@@ -52,8 +58,7 @@ if (canvas && stage) {
       markers,
       arcs,
       onRender: state => {
-        // デバッグ用: 強制的に回転させるように条件を外しました
-        phi += 0.003; // 少しだけ回転速度も上げてわかりやすくします
+        phi += 0.003;
         state.phi = phi;
       },
     });
