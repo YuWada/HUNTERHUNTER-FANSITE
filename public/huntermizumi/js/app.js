@@ -152,6 +152,11 @@ class NenApp {
       return candidates[Math.floor(Math.random() * candidates.length)];
     }
 
+    // ランダム要素を強化: 30%の確率で完全にランダムな質問を選ぶ
+    if (Math.random() < 0.3) {
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
     // Phase 2〜4: 現在のスコア上位系統や競合系統にアプローチする設問を重み付け抽出
     // 現在のスコアを計算
     const currentScores = this.getCurrentAccumulatedScores();
@@ -173,7 +178,7 @@ class NenApp {
         variance += Math.abs(s1 - s2);
       });
       // 少しランダム性を加えて偏りを防ぐ
-      const scoreWeight = variance + Math.random() * 3;
+      const scoreWeight = variance + Math.random() * 10;
       if (scoreWeight > maxVariance) {
         maxVariance = scoreWeight;
         bestQuestion = q;
@@ -355,7 +360,11 @@ class NenApp {
         const opt = item.question.options[item.selectedOptionIndex];
         if (opt && opt.scores) {
           Object.keys(opt.scores).forEach(key => {
-            this.scores[key] += opt.scores[key];
+            if (key !== 'specialization') {
+              this.scores[key] += opt.scores[key] * 1.1;
+            } else {
+              this.scores[key] += opt.scores[key];
+            }
           });
         }
       }
@@ -494,6 +503,7 @@ class NenApp {
       });
       const abilityIndex = Math.abs(hash) % dominant.originalAbilities.length;
       const ability = dominant.originalAbilities[abilityIndex];
+      this.resultData.originalAbility = ability;
 
       abilityContainer.innerHTML = `
         <div class="original-ability-card" style="--card-color: ${dominant.color}">
@@ -504,28 +514,8 @@ class NenApp {
           <h3 class="ability-name">${ability.name}</h3>
           <p class="ability-desc">${ability.desc}</p>
           <div class="ability-subnote">※あなたの無意識の行動心理と潜在オーラパターンから構築された専用の能力です。</div>
-          <button id="btn-reroll-ability" class="btn-reroll" style="border-color:${dominant.color}; color:${dominant.color};">
-            🎲 別の潜在能力を見る
-          </button>
         </div>
       `;
-
-      // 別の潜在能力を閲覧するボタン
-      const btnReroll = document.getElementById('btn-reroll-ability');
-      if (btnReroll) {
-        let currentIdx = abilityIndex;
-        btnReroll.addEventListener('click', () => {
-          nenAudio.playClick();
-          currentIdx = (currentIdx + 1) % dominant.originalAbilities.length;
-          const nextAbility = dominant.originalAbilities[currentIdx];
-          const nameEl = abilityContainer.querySelector('.ability-name');
-          const descEl = abilityContainer.querySelector('.ability-desc');
-          const labelEl = abilityContainer.querySelector('.ability-index-label');
-          if (nameEl) nameEl.textContent = nextAbility.name;
-          if (descEl) descEl.textContent = nextAbility.desc;
-          if (labelEl) labelEl.textContent = `全${dominant.originalAbilities.length}種中 No.${currentIdx + 1}`;
-        });
-      }
     }
 
     // 6. 相性分析
@@ -550,10 +540,30 @@ class NenApp {
   shareToX() {
     if (!this.resultData) return;
     const dominant = this.resultData.dominantData;
-    const pct = this.resultData.percentages[this.resultData.dominantType];
-    const text = `【非公式ファンメイド｜HUNTER×HUNTER 念系統 深層心理診断】\n私の念系統は『${dominant.name}（適合度${pct}%）』でした！\n\nヒソカの性格分析：「${dominant.hisokaQuote}」♦\n水見式：${dominant.mizumishiki.title}\n\n15問の心理テストであなたの念系統を診断しよう！\n#念能力診断 #ハンターハンター #HUNTERxHUNTER`;
-    const url = window.location.href;
-    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    const p = this.resultData.percentages;
+    const ability = this.resultData.originalAbility;
+    const text = `【電脳ハンター協会：よく当たる念能力系統診断ヒソカ×水見式】
+念能力：　${ability.name}
+${ability.desc}
+
+判定系統：${dominant.name}（${dominant.english}）
+ヒソカの分析：『${dominant.hisokaQuote}』
+${dominant.summary}
+
+▼ 六性図 オーラ適性分布
+強化系: ${p.enhancement}%
+変化系: ${p.transmutation}%
+放出系: ${p.emission}%
+具現化系: ${p.conjuration}%
+操作系: ${p.manipulation}%
+特質系: ${p.specialization}%
+
+電脳ハンター協会
+https://hunterhunter-fansite.pages.dev/
+
+#念能力診断 #ヒソカの水見式 #ハンターハンター #HUNTERxHUNTER`;
+    const url = 'https://hunterhunter-fansite.pages.dev/';
+    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(shareUrl, '_blank');
   }
 
@@ -562,7 +572,25 @@ class NenApp {
     if (!this.resultData) return;
     const dominant = this.resultData.dominantData;
     const p = this.resultData.percentages;
-    const text = `【非公式ファンメイド｜HUNTER×HUNTER 念能力 系統深層心理診断結果】\n判定系統：${dominant.name}（${dominant.english}）\nヒソカの分析：『${dominant.hisokaQuote}』\n${dominant.summary}\n\n▼ 六性図 オーラ適性分布\n強化系: ${p.enhancement}%\n変化系: ${p.transmutation}%\n放出系: ${p.emission}%\n具現化系: ${p.conjuration}%\n操作系: ${p.manipulation}%\n特質系: ${p.specialization}%\n\n#HUNTERxHUNTER #念能力診断`;
+    const ability = this.resultData.originalAbility;
+    const text = `【電脳ハンター協会：よく当たる念能力系統診断ヒソカ×水見式】
+念能力：　${ability.name}
+${ability.desc}
+
+判定系統：${dominant.name}（${dominant.english}）
+ヒソカの分析：『${dominant.hisokaQuote}』
+${dominant.summary}
+
+▼ 六性図 オーラ適性分布
+強化系: ${p.enhancement}%
+変化系: ${p.transmutation}%
+放出系: ${p.emission}%
+具現化系: ${p.conjuration}%
+操作系: ${p.manipulation}%
+特質系: ${p.specialization}%
+
+電脳ハンター協会
+https://hunterhunter-fansite.pages.dev/`;
 
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById('btn-copy-result');

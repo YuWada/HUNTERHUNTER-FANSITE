@@ -360,3 +360,13 @@ with open(html_path, "w", encoding="utf-8") as f:
     f.write(final_html)
 
 print(f"Updated HTML and MD with {len(quotes)} quotes (Kurapika bonus removed).")
+
+# Inject shared header
+import subprocess
+inject_script = "/Users/yu/Antigravity_workspace/HUNTERHUNTER-FANSITE/inject_shared_header.py"
+if os.path.exists(inject_script):
+    try:
+        subprocess.run(["python3", inject_script], check=True)
+        print("Successfully injected shared header.")
+    except Exception as e:
+        print(f"Failed to inject shared header: {e}")

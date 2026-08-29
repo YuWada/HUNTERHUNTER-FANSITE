@@ -3,8 +3,8 @@
 :root {
     --md-text-font: "Noto Sans JP", sans-serif;
 }
-.md-typeset h1, 
-.md-typeset h2, 
+.md-typeset h1,
+.md-typeset h2,
 .md-typeset h3 {
     font-family: "Noto Serif JP", serif;
     font-weight: 500;

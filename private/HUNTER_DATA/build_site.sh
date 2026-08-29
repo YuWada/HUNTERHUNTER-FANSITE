@@ -139,6 +139,9 @@ mkdocs build
 cd ..
 rm -rf build_src
 
+echo "5. 共通ヘッダー（Denno Hunter Association）のインジェクション..."
+python3 /Users/yu/Antigravity_workspace/HUNTERHUNTER-FANSITE/inject_shared_header.py
+
 echo "=========================================================="
-echo "ビルド成功！デザインと順番が更新されました。"
+echo "ビルド成功！デザインと順番が更新されました。" 
 echo "=========================================================="
