@@ -37,7 +37,10 @@ if (canvas && stage) {
     if (globe) {
       globe.destroy();
       cancelAnimationFrame(animationFrame); // 既存のループを停止
-      if (canvas) canvas.remove();
+      
+      // Cobeはcanvasの周りにラッパーdivを自動生成するため、stageの中身を完全に空にしてリセットする
+      stage.innerHTML = '';
+      
       canvas = document.createElement('canvas');
       canvas.id = 'hunter-globe';
       canvas.style.width = '100%';
@@ -74,7 +77,8 @@ if (canvas && stage) {
     // 自分で requestAnimationFrame を回して update を呼ぶのが Vanilla JS での正しいアニメーション手法
     const loop = () => {
       if (visible) {
-        phi += 0.003;
+        // 回転速度を 1/3 (0.003 -> 0.001) に変更
+        phi += 0.001;
         if (globe) globe.update({ phi });
       }
       animationFrame = requestAnimationFrame(loop);
