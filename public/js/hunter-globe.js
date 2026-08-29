@@ -4,7 +4,8 @@ let canvas = document.querySelector('#hunter-globe');
 const stage = canvas?.closest('.globe-stage');
 
 if (canvas && stage) {
-  let phi = 3.2;
+  // アクセスするたびに初期の角度（自転の開始位置）をランダムにする
+  let phi = Math.random() * Math.PI * 2; 
   let globe;
   let visible = true;
 
