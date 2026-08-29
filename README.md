@@ -4,10 +4,14 @@
 
 ## 構成
 
-- `/` — ファンサイトのトップページ
-- `/huntermizumi/` — 念能力 系統診断
+- `/public/` — Cloudflare PagesでWeb公開するファイル
+  - `/public/index.html` — ファンサイトのトップページ
+  - `/public/huntermizumi/` — 念能力 系統診断
+- `/private/` — Git管理するがWeb公開しない資料・下書き
 
-このリポジトリの `main` ブランチへのプッシュを、Cloudflare Pagesの本番公開へ自動反映します。
+このリポジトリの `main` ブランチへのプッシュを、Cloudflare Pagesの本番公開へ自動反映します。Cloudflare PagesのBuild output directoryは `public` に設定しています。
+
+`private/` の内容はWebサイトには公開されません。ただし、このGitHubリポジトリ自体はPublicのため、GitHub上では閲覧できます。秘密情報、個人情報、APIキーなどは保存しないでください。
 
 ## 権利関係について
 
