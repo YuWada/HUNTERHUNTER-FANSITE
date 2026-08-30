@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUNTER試験 ドキドキ５択クイズ</title>
+  <meta name="description" content="HUNTER×HUNTERの知識を試すドキドキ５択クイズ。正解するほど難易度が上がる全25問の試練に挑め！">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="icon" type="image/svg+xml" href="../shared/favicon.svg">
+  <link rel="stylesheet" href="../shared/site-header.css" data-denno-shared-header>
+  <script defer src="../shared/site-header.js" data-denno-shared-header></script>
+</head>
+<body>
+  <div id="tsparticles" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;"></div>
+
+  <!-- 背景アンビエントオーラ -->
+  <div class="bg-ambient-aura">
+    <div class="aura-orb orb-1"></div>
+    <div class="aura-orb orb-2"></div>
+    <div class="aura-orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="brand-badge">HUNTER EXAM - QUIZ</div>
+    </header>
+
+    <!-- スタート画面 -->
+    <section id="screen-start" class="screen active">
+      <div class="title-container" style="text-align: center;">
+        <p class="subtitle" style="margin-bottom: 5px;">〜 ハンター試験 〜</p>
+        <h1 style="margin-bottom: 30px;">ドキドキ５択クイズ</h1>
+      </div>
+      
+      <div class="description-box">
+        <p>ここはハンター試験会場へと続く道のり。</p>
+        <p>これから君たちには、ハンターとしての資質を問うクイズを出題する。</p>
+        <p>問題は<strong>全部で25問</strong>。正解を重ねるほど、問題はより深く、より困難なものになっていくだろう。</p>
+        <p>一度解答を決めたら選び直すことは出来ない。覚悟はいいかい？</p>
+      </div>
+
+      <button id="btn-start" class="btn-primary">試験を開始する</button>
+    </section>
+
+    <!-- クイズ画面 -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-header">
+        <div class="quiz-progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="quiz-status">
+          <span id="stage-text">段階 1</span>
+          <span id="question-count-text">1 / 25 問目</span>
+        </div>
+      </div>
+
+      <div class="question-container">
+        <h2 id="question-text">読み込み中...</h2>
+      </div>
+
+      <div id="choices-container" class="choices-container">
+        <!-- 選択肢がここにJavaScriptで生成される -->
+      </div>
+    </section>
+
+    <!-- 結果画面 -->
+    <section id="screen-result" class="screen">
+      <div class="result-header">
+        <h2>試験終了</h2>
+        <p>よくやったね。君の結果は以下の通りだ。</p>
+      </div>
+
+      <div class="result-card">
+        <div class="result-stats">
+          <div class="stat-item">
+            <span class="stat-label">正解数</span>
+            <span id="result-corrects" class="stat-value">0 / 25</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">最終得点</span>
+            <span id="result-score" class="stat-value">0</span>
+          </div>
+        </div>
+        
+        <div class="rank-container">
+          <p class="rank-label">君のランクは…</p>
+          <h3 id="result-rank" class="rank-title">一般人レベル</h3>
+          <p id="result-desc" class="rank-desc"></p>
+        </div>
+      </div>
+
+      <div class="share-container">
+        <button id="btn-share-x" class="btn-secondary share-x">𝕏 で結果をシェア</button>
+        <button id="btn-share-copy" class="btn-secondary share-copy">結果をコピー</button>
+      </div>
+
+      <div class="retry-container">
+        <p class="retry-text">問題はランダムに出題される。<br>来年もまた受験しよう！！</p>
+        <button id="btn-retry" class="btn-primary">もう一度受験する</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="quiz_data.js"></script>
+  <script src="quiz.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
+  <script>
+    tsParticles.load("tsparticles", {
+      particles: {
+        number: { value: 360, density: { enable: true, value_area: 800 } },
+        color: { value: ["#ffffff", "#b9e52d", "#e54335", "#f1c40f"] },
+        shape: { type: "circle" },
+        opacity: { 
+          value: { min: 0.2, max: 0.8 }, 
+          animation: { enable: true, speed: 0.5, sync: false } 
+        },
+        size: { 
+          value: { min: 0.5, max: 2 }, 
+          animation: { enable: true, speed: 1, sync: false } 
+        },
+        move: { enable: true, speed: 0.3, direction: "none", random: true, straight: false, outModes: "out" }
+      },
+      detectRetina: true
+    });
+  </script>
+</body>
+</html>
