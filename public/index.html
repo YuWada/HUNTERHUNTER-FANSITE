@@ -252,6 +252,28 @@
     }
     .feature--quiz .feature-status { color: var(--gold); }
     .feature--quiz .feature-status::before { background: currentColor; box-shadow: 0 0 12px currentColor; }
+    
+    .feature--glaph::before {
+      background:
+        linear-gradient(180deg, rgba(8,9,7,.08), rgba(8,9,7,.96) 78%),
+        radial-gradient(circle at 75% 25%, rgba(136,192,208,.24), transparent 13rem),
+        repeating-radial-gradient(circle at 75% 25%, transparent 0 20px, rgba(136,192,208,.05) 21px 22px),
+        linear-gradient(145deg, #10161a, #0b0d0b 68%);
+    }
+    .feature--glaph::after {
+      position: absolute;
+      top: 36px;
+      right: 32px;
+      color: rgba(136,192,208,.15);
+      font: 900 64px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      content: "NET";
+    }
+    .feature--glaph .feature-status { color: #88c0d0; }
+    .feature--glaph .feature-status::before { background: currentColor; box-shadow: 0 0 12px currentColor; }
+    .feature--glaph .feature-action { border-color: rgba(136,192,208,.34); color: #c4dbe0; background: rgba(136,192,208,.08); }
+    .feature--glaph .feature-action span:last-child { border-color: rgba(136,192,208,.38); color: #88c0d0; background: rgba(136,192,208,.08); }
+    .feature--glaph:hover .feature-action { border-color: rgba(136,192,208,.65); background: rgba(136,192,208,.13); }
+
     .feature-content { position: relative; z-index: 1; align-self: flex-end; width: 100%; padding: 28px; }
     .feature-number { position: absolute; top: 22px; left: 26px; z-index: 2; color: rgba(255,255,255,.26); font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
     .feature-status { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; color: var(--acid); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
@@ -458,7 +480,7 @@
           <div class="feature-content">
             <div class="feature-status">NETWORK GRAPH ONLINE</div>
             <h3>神眼データベースの小宇宙</h3>
-            <p>神眼データベースをネットワークグラフで可視化しました。</p>
+            <p>神眼データベースをネットワークグラフで可視化しました。HUNTER×HUNTERの世界を感じることができる電脳世界の住人専用の空間です。</p>
             <div class="feature-action"><span>念視（サイトビジョン）オン！</span><span aria-hidden="true">↗</span></div>
           </div>
         </a>

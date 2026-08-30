@@ -108,7 +108,7 @@ def main():
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #1a1a1a; color: #fff; overflow: hidden;}
         #mynetwork { width: 100vw; height: 100vh; border: none; }
         #legend {
-            position: absolute; top: 20px; left: 20px; z-index: 10;
+            position: absolute; bottom: 20px; left: 20px; z-index: 10;
             background: rgba(0,0,0,0.85); padding: 15px; border-radius: 8px; font-size: 14px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
