@@ -1,6 +1,7 @@
 ---
+type: Index
 title: 用語集_念
-timestamp: 2026-08-29T17:04:04Z
+timestamp: 2026-08-30T23:16:36Z
 ---
 # 用語集_念
 
