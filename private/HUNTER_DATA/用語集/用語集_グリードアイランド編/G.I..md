@@ -2,7 +2,7 @@
 type: Glossary
 title: G.I.
 description: HUNTER×HUNTERの用語
-tags: ['glossary']
+tags: ['用語']
 timestamp: 2026-08-29T05:10:56Z
 ---
 # G.I.

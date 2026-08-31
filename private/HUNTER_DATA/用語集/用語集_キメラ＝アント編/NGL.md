@@ -2,7 +2,7 @@
 type: Glossary
 title: NGL
 description: HUNTER×HUNTER 用語集
-tags: ['term']
+tags: ['用語']
 timestamp: 2026-08-29T17:01:37Z
 ---
 # NGL
