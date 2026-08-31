@@ -1,7 +1,7 @@
 ---
 type: Index
 title: 用語集_天空闘技場編
-timestamp: 2026-08-30T23:16:36Z
+timestamp: 2026-08-31T00:30:12Z
 ---
 # 用語集_天空闘技場編
 
