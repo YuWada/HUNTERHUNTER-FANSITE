@@ -40,7 +40,7 @@
   const section = relativePath.split("/")[0];
 
   const links = [
-    { key: "hunterdata", label: "神眼DB", path: "hunterdata/" },
+    { key: "hunterdata2", label: "神眼DB", path: "hunterdata2/" },
     { key: "huntermizumi", label: "性格念診断", path: "huntermizumi/" },
     { key: "hunterkeisai", label: "WJ掲載号", path: "hunterkeisai/" },
     { key: "huntermoji", label: "天使H文字", path: "huntermoji/" },
