@@ -2,7 +2,7 @@
 type: Concept
 title: HUNTER×HUNTER ナレッジインデックス
 description: HUNTER×HUNTERの各編の情報をまとめたインデックスページ
-tags: ['目次', 'HUNTER×HUNTER']
+tags: ['HUNTER×HUNTER', '目次']
 timestamp: 2026-08-29T04:17:06Z
 ---
 # HUNTER×HUNTER ナレッジインデックス
