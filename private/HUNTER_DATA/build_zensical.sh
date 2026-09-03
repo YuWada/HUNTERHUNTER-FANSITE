@@ -84,6 +84,7 @@ CSS
 cat << 'TOML' > build_zensical_src/zensical.toml
 [project]
 site_name = "HUNTER×HUNTER 神眼データベース"
+site_url = "https://hunterhunter-fansite.pages.dev/hunterdata2/"
 
 extra_css = ["stylesheets/extra.css"]
 
@@ -137,6 +138,9 @@ rm -rf build_zensical_src
 
 echo "5. 共通ヘッダー（Denno Hunter Association）のインジェクション..."
 python3 /Users/yu/Antigravity_workspace/HUNTERHUNTER-FANSITE/inject_shared_header.py
+
+echo "6. SEO情報のインジェクション..."
+python3 inject_seo.py
 
 echo "=========================================================="
 echo "Zensical ビルド成功！デザインと順番が更新されました。" 
