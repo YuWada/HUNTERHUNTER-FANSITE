@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今日から使おう！Hunter×Hunter名セリフ（ビジネス・エンジニア編） | 電脳ハンター協会</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080907;
+      --bg-darker: #050605;
+      --panel: rgba(16, 18, 15, 0.75);
+      --text: #f3f0e4;
+      --muted: #a7aa9f;
+      --subtle: #6f746b;
+      --acid: #b9e52d;
+      --gold: #d7ad4a;
+      --line: rgba(231, 232, 216, .12);
+      --line-strong: rgba(185, 229, 45, .2);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--acid);
+      text-align: center;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(185, 229, 45, 0.3);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 50px;
+    }
+
+    .quote-card {
+      background: var(--panel);
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--acid);
+    }
+
+    .scenario {
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-bottom: 15px;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--gold);
+    }
+
+    .original {
+      font-size: 0.85rem;
+      color: var(--subtle);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .dialogue {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-radius: 6px;
+    }
+
+    .dialogue p {
+      margin: 10px 0;
+    }
+
+    .speaker {
+      font-weight: bold;
+      color: var(--muted);
+      margin-right: 10px;
+    }
+
+    /* 協調スタイル：太字＆フォントサイズ大 */
+    .hunter-quote {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      display: block;
+      margin-top: 10px;
+      text-shadow: 2px 2px 0px rgba(185, 229, 45, 0.5);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 40px;
+      color: var(--acid);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--acid);
+    }
+    
+    .back-link:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+  </style>
+
+  <link rel="icon" type="image/svg+xml" href="../shared/favicon.svg">
+  <link rel="stylesheet" href="../shared/site-header.css" data-denno-shared-header>
+  <script defer src="../shared/site-header.js" data-denno-shared-header></script>
+</head>
+<body>
+
+  <div class="container">
+    <h1>今日から使おう！<br>Hunter×Hunter名セリフ</h1>
+    <p class="subtitle">お仕事上でさっそく名言を使ってみよう！（エンジニア・ビジネス編）</p>
+
+    <!-- 1 -->
+    <div class="quote-card">
+      <div class="scenario">難解なバグを発見したとき</div>
+      <div class="original">元ネタ：おそろしく速い手刀 オレでなきゃ見逃しちゃうね</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">後輩</span>「先輩、この条件分岐、特定のデータパターンでだけ落ちるみたいなんです…ログ見ても全然原因がわからなくて…」</p>
+        <p><span class="speaker">先輩</span>「どれどれ……なるほどね。ここの非同期処理のタイミングだな。」</p>
+        <p><span class="speaker">先輩</span><span class="hunter-quote">「おそろしくレアなバグ<br>オレでなきゃ見逃しちゃうね」</span></p>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="quote-card">
+      <div class="scenario">メモリリークを起こしているコードを見たとき</div>
+      <div class="original">元ネタ：キミの敗因は 容量（メモリ）のムダ使い</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">同僚</span>「なんでこのバッチ処理、途中でいつもクラッシュするんだろう……スペックは足りてるはずなのに。」</p>
+        <p><span class="speaker">エンジニア</span>「変数を全部グローバルスコープで保持してるからだよ。」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「キミの敗因は<br>容量（メモリ）のムダ使い」</span></p>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="quote-card">
+      <div class="scenario">厳しいダメ出しだと勘違いさせてから正論で黙らせるとき</div>
+      <div class="original">元ネタ：——という誤解をもたらしかねない言動は慎んだ方がいい…ここまでがワンセンテンスだ、宜しいか？</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">先輩</span>「お前の書いたこのコード、設計からやり直した方がいい。まるで素人が書いたクソコードだぞ」</p>
+        <p><span class="speaker">後輩</span>「（カチンときて）……そんな言い方しなくたって！」</p>
+        <p><span class="speaker">先輩</span>「——と、レビューで他の人にボロクソに言われかねないから、ここは直しておいた方がいい。<br><span class="hunter-quote">ここまでがワンセンテンスだ、<br>よろしいか？</span>」</p>
+      </div>
+    </div>
+
+    <!-- 3.5 -->
+    <div class="quote-card">
+      <div class="scenario">説明したあとに細かく野暮な確認をされたとき</div>
+      <div class="original">元ネタ：普通の理解力があれば確認は不要だと思うが？</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">部下</span>「ええと、つまりこの条件を満たした場合はこちらの処理に分岐する、ということで合ってますでしょうか…？」</p>
+        <p><span class="speaker">上司</span>「……」</p>
+        <p><span class="speaker">上司</span><span class="hunter-quote">「普通の理解力があれば<br>確認は不要だと思うが？」</span></p>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="quote-card">
+      <div class="scenario">プロジェクトが炎上して人が足りないとき</div>
+      <div class="original">元ネタ：オレが 3人分になる…</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">PM</span>「すまない、来週リリースなんだけど、チームメンバーが2人インフルエンザで倒れてしまった……誰か急遽カバーできないか？」</p>
+        <p><span class="speaker">エンジニア</span>「……」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「オレが 3人分になる…」</span></p>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="quote-card">
+      <div class="scenario">クソコードのリファクタリングがやめられないとき</div>
+      <div class="original">元ネタ：クセになってんだ 音殺して歩くの</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">同僚</span>「先輩、またAさんのプルリク、勝手に全部手直ししてるんですか？ 時間もったいないですよ」</p>
+        <p><span class="speaker">先輩</span>「……」</p>
+        <p><span class="speaker">先輩</span><span class="hunter-quote">「あいつのコード、クセになってんだ、<br>マージ前に書き直すの」</span></p>
+      </div>
+    </div>
+
+    <!-- 6 (Replaced) -->
+    <div class="quote-card">
+      <div class="scenario">無茶なスケジュールの追加要望をされたとき</div>
+      <div class="original">元ネタ：その人殺しにいくら払える？</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">クライアント</span>「すいません、どうしても明日までにこの機能を追加してほしいんですが…なんとかなりませんか？」</p>
+        <p><span class="speaker">PM</span>「……」</p>
+        <p><span class="speaker">PM</span><span class="hunter-quote">「その仕様変更（人殺し）に<br>いくら払える？」</span></p>
+      </div>
+    </div>
+
+    <!-- 6.1 -->
+    <div class="quote-card">
+      <div class="scenario">新人が本番DBを直接いじろうとしたとき</div>
+      <div class="original">元ネタ：そりゃ悪手だろ、蟻んコ</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">新人</span>「テストデータ作るの面倒なんで、本番DBに直接UPDATE文投げていいですか？」</p>
+        <p><span class="speaker">先輩</span>「……」</p>
+        <p><span class="speaker">先輩</span><span class="hunter-quote">「そりゃ悪手だろ、蟻んコ」</span></p>
+      </div>
+    </div>
+
+    <!-- 6.2 -->
+    <div class="quote-card">
+      <div class="scenario">長時間悩まされたエラーの原因を特定したとき</div>
+      <div class="original">元ネタ：ボマー捕まえた</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">エンジニア</span>「（深夜3時）ずっと出ていた謎のエラー、ついに原因箇所特定したぞ……」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「ボマー（バグ）捕まえた」</span></p>
+      </div>
+    </div>
+
+    <!-- 6.3 -->
+    <div class="quote-card">
+      <div class="scenario">レガシーシステムの闇の深さを指摘するとき</div>
+      <div class="original">元ネタ：お前は何もわかっていない… 人間の底すらない悪意（進化）を…！！</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">若手</span>「このシステム、なんでこんな複雑なテーブル構造になってるんですか？ 少し整理すればすぐ綺麗になりますよ」</p>
+        <p><span class="speaker">ベテラン</span>「……」</p>
+        <p><span class="speaker">ベテラン</span><span class="hunter-quote">「お前は何もわかっていない…<br>システムの底すらない悪意（バグ）を…！！」</span></p>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="quote-card">
+      <div class="scenario">レガシーシステムのリプレイスが完了したとき</div>
+      <div class="original">元ネタ：感謝するぜ お前と出会えた これまでの 全てに!!!</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">エンジニア</span>「ついに…ついにこの技術的負債だらけのシステムをリプレイス完了したぞ…！」</p>
+        <p><span class="speaker">同僚</span>「（古いサーバーをシャットダウンしながら）」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「感謝するぜ お前と出会えた<br>これまでの 全てに!!!」</span></p>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="quote-card">
+      <div class="scenario">修正したはずのバグが再び出たとき</div>
+      <div class="original">元ネタ：死体はフェイク</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">QA</span>「さっき直したって言ってたバグ、まだ再現するんですけど…」</p>
+        <p><span class="speaker">エンジニア</span>「……」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「死体（バグ）はフェイク」</span></p>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="quote-card">
+      <div class="scenario">タスクが多すぎてパンクしそうなとき</div>
+      <div class="original">元ネタ：メモリのムダ使い（容量オーバー）だ…♡</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">PM</span>「明日の朝までに、フロントの実装とバックエンドの改修、あとDBチューニングとインフラ構築もお願いできるかな？」</p>
+        <p><span class="speaker">エンジニア</span>「……」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「キャパ（容量）オーバーだ…♣」</span></p>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="quote-card">
+      <div class="scenario">仕様通りではないが結果オーライなとき</div>
+      <div class="original">元ネタ：ならばよし！</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">エンジニア</span>「すみません、バグって少し変な挙動になってるんですが、クライアントは『こっちの方が使いやすい』と喜んでます！」</p>
+        <p><span class="speaker">PM</span>「……」</p>
+        <p><span class="speaker">PM</span><span class="hunter-quote">「ならばよし！」</span></p>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="quote-card">
+      <div class="scenario">徹夜で最後のコミットをプッシュするとき</div>
+      <div class="original">元ネタ：もうこれで終わってもいい だから ありったけを</div>
+      
+      <div class="dialogue">
+        <p><span class="speaker">エンジニア</span>「（朝の5時）……これが最後のエラー修正だ。これをマージすれば、ようやくリリースできる……」</p>
+        <p><span class="speaker">エンジニア</span><span class="hunter-quote">「もうこれで終わってもいい<br>だから、ありったけのコーヒー（念）を」</span></p>
+      </div>
+    </div>
+
+    <a href="../index.html" class="back-link">← 戻る（リンクは後で設定）</a>
+  </div>
+
+</body>
+</html>
