@@ -6,6 +6,9 @@ echo "1. オートリンカーを実行しています..."
 source venv/bin/activate
 python3 auto_linker.py
 
+echo "1.5. 人物名一覧（index.md）を動的生成しています..."
+python3 generate_char_index.py
+
 echo "2. 公開用の静的サイトビルドの準備..."
 rm -rf build_zensical_src
 mkdir -p build_zensical_src/docs/stylesheets
