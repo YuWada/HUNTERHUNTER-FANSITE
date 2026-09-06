@@ -52,7 +52,7 @@ def main():
             if display_tags:
                 # バッジ風にするために spanタグ とクラスを付与
                 # <span class="tag-badge">タグ</span> のような形式
-                badges = [f'<span class="tag-badge" style="display:inline-block; margin-left:8px; padding:2px 6px; font-size:0.8em; background-color:#f0f0f0; color:#666; border-radius:4px; border:1px solid #ddd;">{t}</span>' for t in display_tags]
+                badges = [f'<span class="tag-badge" style="display:inline-block; margin-left:6px; padding:0px 6px; font-size:0.75em; background-color:#fafafa; color:#888; border-radius:10px; border:1px solid #eaeaea; line-height:1.4;">{t}</span>' for t in display_tags]
                 tag_str = "".join(badges)
                 
         lines.append(f"* [{name}](./{f}){tag_str}")
