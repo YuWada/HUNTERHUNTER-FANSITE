@@ -17,7 +17,7 @@
   <meta property="og:description" content="調べる。試す。見つける。『HUNTER×HUNTER（ハンターハンター・HxH）』の世界をもっと深く楽しむ非公式データベース。念能力診断、ハンター文字変換、ハンター試験クイズを搭載。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hunterhunter-fansite.pages.dev/">
-  <meta property="og:image" content="https://hunterhunter-fansite.pages.dev/assets/hunter-archive-hero.png">
+  <meta property="og:image" content="https://hunterhunter-fansite.pages.dev/assets/og_image_cyber_hunter.jpg">
   <meta property="og:site_name" content="電脳ハンター協会">
   <meta property="og:locale" content="ja_JP">
   
@@ -275,6 +275,27 @@
     .feature--glaph .feature-action span:last-child { border-color: rgba(136,192,208,.38); color: #88c0d0; background: rgba(136,192,208,.08); }
     .feature--glaph:hover .feature-action { border-color: rgba(136,192,208,.65); background: rgba(136,192,208,.13); }
 
+    .feature--db-guide::before {
+      background:
+        linear-gradient(180deg, rgba(8,9,7,.08), rgba(8,9,7,.96) 78%),
+        radial-gradient(circle at 75% 25%, rgba(155,89,182,.24), transparent 13rem),
+        repeating-linear-gradient(45deg, rgba(155,89,182,.05) 0 1px, transparent 1px 15px),
+        linear-gradient(145deg, #16101a, #0b0d0b 68%);
+    }
+    .feature--db-guide::after {
+      position: absolute;
+      top: 36px;
+      right: 32px;
+      color: rgba(155,89,182,.15);
+      font: 900 64px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      content: "OKF";
+    }
+    .feature--db-guide .feature-status { color: #b48ead; }
+    .feature--db-guide .feature-status::before { background: currentColor; box-shadow: 0 0 12px currentColor; }
+    .feature--db-guide .feature-action { border-color: rgba(155,89,182,.34); color: #dbccdf; background: rgba(155,89,182,.08); }
+    .feature--db-guide .feature-action span:last-child { border-color: rgba(155,89,182,.38); color: #b48ead; background: rgba(155,89,182,.08); }
+    .feature--db-guide:hover .feature-action { border-color: rgba(155,89,182,.65); background: rgba(155,89,182,.13); }
+
     .feature-content { position: relative; z-index: 1; align-self: flex-end; width: 100%; padding: 28px; }
     .feature-number { position: absolute; top: 22px; left: 26px; z-index: 2; color: rgba(255,255,255,.26); font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
     .feature-status { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; color: var(--acid); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
@@ -483,6 +504,15 @@
             <h3>神眼データベースの小宇宙</h3>
             <p>神眼データベースをネットワークグラフで可視化しました。HUNTER×HUNTERの世界を感じることができる電脳世界の住人専用の空間です。</p>
             <div class="feature-action"><span>念視（サイトビジョン）オン！</span><span aria-hidden="true">↗</span></div>
+          </div>
+        </a>
+        <a class="feature feature--db-guide" href="./shingandb/" target="_blank" rel="noopener noreferrer">
+          <span class="feature-number">INDEX 08</span>
+          <div class="feature-content">
+            <div class="feature-status">BEHIND THE SCENES ONLINE</div>
+            <h3>ゲームマスターの<br>神眼DB解説</h3>
+            <p>神眼データベースの裏側に潜む構築ロジック。AIエージェントに念能力の理（ことわり）を理解させるOKFの深淵なる構造を解説。</p>
+            <div class="feature-action"><span>世界の裏側を覗く</span><span aria-hidden="true">↗</span></div>
           </div>
         </a>
       </div>
