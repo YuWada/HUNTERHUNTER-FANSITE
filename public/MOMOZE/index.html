@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUNTER×HUNTER 長編・死闘アドベンチャー</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            text-align: center;
+            padding: 10px;
+        }
+        #game-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #444;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+        }
+        #status-bar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #000;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .hp-text { color: #ff5252; }
+        .aura-text { color: #53d2dc; }
+        
+        #log-container {
+            height: 100px;
+            overflow-y: auto;
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+        .log-entry { margin-bottom: 4px; }
+        .log-hp { color: #ff5252; }
+        .log-aura { color: #53d2dc; }
+        .log-sys { color: #888; }
+
+        #text-display {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            min-height: 150px;
+            white-space: pre-wrap;
+            text-align: left;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            border-left: 5px solid #555;
+        }
+        .choice-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0;
+            background-color: #2c3e50;
+            color: white;
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .choice-btn:hover:not(:disabled) {
+            background-color: #34495e;
+            transform: translateX(5px);
+        }
+        .choice-btn:disabled {
+            background-color: #222;
+            color: #555;
+            cursor: not-allowed;
+            border-color: #111;
+        }
+        .cost-tag {
+            float: right;
+            font-size: 0.9rem;
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .game-over { color: #ff4c4c; font-weight: bold; font-size: 1.3rem; display: block; text-align: center; margin-bottom: 10px; }
+        .true-end { color: #FFD700; font-weight: bold; font-size: 1.3rem; display: block; text-align: center; margin-bottom: 10px; }
+        .system-text { color: #aaaaaa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <h1 style="color: #ddd; font-size: 1.4rem; border-bottom: 1px solid #444; padding-bottom: 10px; margin-top:0;">HUNTER×HUNTER 〜理不尽な世界〜</h1>
+        
+        <div id="status-bar">
+            <div class="hp-text">体力: <span id="hp-val">100</span> / 100</div>
+            <div class="aura-text">オーラ: <span id="aura-val">100</span> / 100</div>
+        </div>
+
+        <div id="log-container"></div>
+        <div id="text-display"></div>
+        <div id="choices-container"></div>
+    </div>
+
+    <script>
+        let player = {
+            hp: 100,
+            aura: 100,
+            flags: []
+        };
+
+        const MAX_STAT = 100;
+
+        function addLog(msg, type) {
+            const logContainer = document.getElementById('log-container');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.innerText = `> ${msg}`;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function modifyStat(type, amount) {
+            if (amount === 0) return;
+            if (type === 'hp') {
+                player.hp = Math.min(MAX_STAT, Math.max(0, player.hp + amount));
+                if (amount > 0) addLog(`体力が ${amount} 回復した。`, 'hp');
+                else addLog(`体力を ${Math.abs(amount)} 失った！`, 'hp');
+            } else if (type === 'aura') {
+                player.aura = Math.min(MAX_STAT, Math.max(0, player.aura + amount));
+                if (amount > 0) addLog(`オーラが ${amount} 回復した。`, 'aura');
+                else addLog(`オーラを ${Math.abs(amount)} 消費した！`, 'aura');
+            }
+            document.getElementById('hp-val').innerText = player.hp;
+            document.getElementById('aura-val').innerText = player.aura;
+        }
+
+        function resetGame() {
+            player = { hp: 100, aura: 100, flags: [] };
+            document.getElementById('log-container').innerHTML = '';
+            addLog('ゲームを開始しました。ステータスとオーラを管理し、最後まで生き延びてください。', 'sys');
+            modifyStat('hp', 0); // trigger UI update
+            modifyStat('aura', 0);
+            renderScene('start');
+        }
+
+        const gameData = {
+            // --- Phase 1: 導入 ---
+            start: {
+                text: "あなたの目の前に、ネズミのような奇妙な生き物が現れた。\n\nモモゼの念獣「おヒマ？」",
+                choices: [
+                    { text: "「ヒマだったから…」", next: "bad_momoze" },
+                    { text: "「いや…ヒマではない…」", next: "scene_momoze2" },
+                    { text: "「沈黙！」", next: "scene_quiz" }
+                ]
+            },
+            bad_momoze: {
+                text: "<span class='game-over'>【GAME OVER】</span>\n肯定したため、モモゼの念獣に取り憑かれた。\n\nヒソカ「キミの敗因は容量（メモリ）のムダ使い❤︎」",
+                choices: [{ text: "最初からやり直す", next: "reset" }]
+            },
+            scene_momoze2: {
+                text: "念獣「おヒマが出来たら教えて？ね？ね？」\nしつこくまとわりついてくる！",
+                choices: [
+                    { text: "「俺が3人分になる」", auraCost: 20, next: "scene_quiz" },
+                    { text: "「そりゃ悪手だろ」", hpCost: 20, next: "scene_quiz" },
+                    { text: "「もうこれで終わってもいい」", auraCost: 50, hpCost: 30, next: "scene_quiz" }
+                ]
+            },
+            
+            // --- Phase 2: クイズと森 ---
+            scene_quiz: {
+                text: "念獣が消えると、突如として老婆が現れた。\n\n老婆「1.息子 2.娘 どちらかしか助けられない どちらを助ける？」",
+                choices: [
+                    { text: "「1.息子」", next: "bad_quiz" },
+                    { text: "「2.娘」", next: "bad_quiz" },
+                    { text: "「両方！！」", hpCost: 50, next: "bad_quiz" },
+                    { text: "「沈黙！」", next: "scene_forest" }
+                ]
+            },
+            bad_quiz: {
+                text: "<span class='game-over'>【GAME OVER】</span>\n老婆「ブッブー！！ 不正解！！」\n「死後強まる念…!!」によって呪い殺された！",
+                choices: [{ text: "最初からやり直す", next: "reset" }]
+            },
+            scene_forest: {
+                text: "老婆「…正解。通ってよし」\n\n森の奥へ進むと、開けた場所に出た。\nジン「道草を楽しめ 大いにな」\n\n少し休憩できそうだ。",
+                choices: [
+                    { text: "「祈りとは 心の所作」", auraHeal: 40, hpHeal: 20, next: "scene_troupe1" },
+                    { text: "「クセになってんだ 音殺して動くの」", auraHeal: 20, hpHeal: 40, next: "scene_troupe1" }
+                ]
+            },
+
+            // --- Phase 3: 幻影旅団 ---
+            scene_troupe1: {
+                text: "森を抜けると、刀を持った男が立ち塞がっていた。\n\nノブナガ「オレの円は半径4m。入ったら斬るぜ」",
+                choices: [
+                    { text: "「オレでなきゃ見逃しちゃうね」", auraCost: 20, next: "scene_troupe2" },
+                    { text: "「死後強まる念…!!」（強行突破）", hpCost: 40, next: "scene_troupe2" },
+                    { text: "「あいつワシより強くね？」（逃げる）", hpCost: 80, next: "scene_troupe2" }
+                ]
+            },
+            scene_troupe2: {
+                text: "ノブナガの円を抜けた先には、冷たい目をした女性がいた。\n\nマチ「あんた、死相が出てるよ」\n見えない念糸が張り巡らされている！",
+                choices: [
+                    { text: "「だます方が悪いに決まっている」", auraCost: 30, next: "scene_troupe3" },
+                    { text: "「品性は金で買えないよ」（強引に引きちぎる）", hpCost: 30, next: "scene_troupe3" }
+                ]
+            },
+            scene_troupe3: {
+                text: "糸の罠を抜けると、奇術師がトランプを切っていた。\n\nヒソカ「オレはいいけど、ヤツはどうかな？」\nヒソカが殺気を放っている！",
+                choices: [
+                    { text: "「感謝するぜ お前と出会えた これまでの全てに!!!」", auraCost: 50, next: "scene_gi_start" },
+                    { text: "「オレでなきゃ見逃しちゃうね」（回避に専念）", hpCost: 30, next: "scene_gi_start" },
+                    { text: "「もうこれで終わってもいい。だからありったけを」", auraCost: 80, next: "scene_gi_start" }
+                ]
+            },
+
+            // --- Phase 4: グリードアイランド ---
+            scene_gi_start: {
+                text: "ヒソカをやり過ごし、謎のゲーム機の前へたどり着いた。\n\n「指輪（リング）をはめて『プレイ』と唱えてください」",
+                choices: [
+                    { text: "「プレイ」", next: "scene_gi_bomber" }
+                ]
+            },
+            scene_gi_bomber: {
+                text: "草原に降り立つと、メガネをかけた男が近づいてきた。\n\nゲンスルー「ボマー捕まえた」\n\nあなたの体に爆弾がセットされた！",
+                choices: [
+                    { text: "「俺が3人分になる」（分身で解除）", auraCost: 30, next: "scene_gi_razor" },
+                    { text: "「あいつワシより強くね？」（爆発覚悟で逃走）", hpCost: 60, next: "scene_gi_razor" }
+                ]
+            },
+            scene_gi_razor: {
+                text: "爆弾の危機を脱すると、巨大な男がバレーボールを持っていた。\n\nレイザー「俺は強いぜ。お前らが絶望するくらいにな」",
+                choices: [
+                    { text: "「キルアじゃなきゃダメなんだ」（連携する）", auraCost: 40, next: "scene_gi_clear" },
+                    { text: "「そりゃ悪手だろ」（フェイント）", hpCost: 30, auraCost: 20, next: "scene_gi_clear" },
+                    { text: "「沈黙！」（無抵抗でボールを受ける）", hpCost: 99, next: "scene_gi_clear" }
+                ]
+            },
+            scene_gi_clear: {
+                text: "強烈なスパイクを打ち返し、レイザーに勝利した！\n\nビスケ「よくやったわね、あんたたち！」\nビスケのマッサージで休息を取る。",
+                choices: [
+                    { text: "「感謝の正拳突き、一日一万回！」", hpHeal: 50, auraHeal: 50, next: "scene_ant_start" },
+                    { text: "「沈黙！」（深く眠る）", hpHeal: 80, auraHeal: 20, next: "scene_ant_start" }
+                ]
+            },
+
+            // --- Phase 5: キメラアント ---
+            scene_ant_start: {
+                text: "ゲームをクリアした先は、禍々しいオーラに包まれた森だった。\n\nピトー「そっか… 君はもう 壊れてもいいおもちゃなんだね…」\n圧倒的な絶望感が襲いかかる。",
+                choices: [
+                    { text: "「その人を知りたければその人が何に対して怒りを…」", auraCost: 40, next: "scene_ant_pouf" },
+                    { text: "「もうこれで終わってもいい。だからありったけを」", hpCost: 50, auraCost: 50, next: "scene_ant_pouf" },
+                    { text: "「あいつワシより強くね？」（逃げる）", hpCost: 80, next: "scene_ant_pouf" }
+                ]
+            },
+            scene_ant_pouf: {
+                text: "ピトーの凶刃を躱した先に、鱗粉を撒き散らす蝶の男がいた。\n\nプフ「おそるべき…才能…！」\n鱗粉を吸えば催眠状態に陥ってしまう！",
+                choices: [
+                    { text: "「クセになってんだ 音殺して動くの」", auraCost: 40, next: "scene_ant_youpi" },
+                    { text: "「沈黙！」（強引に息を止めて突進）", hpCost: 30, next: "scene_ant_youpi" }
+                ]
+            },
+            scene_ant_youpi: {
+                text: "宮殿の階段に、巨大な異形の怪物が鎮座している。\n\nユピー「……」\n言葉はなく、ただ圧倒的な暴力の壁として立ちはだかる。",
+                choices: [
+                    { text: "「オレでなきゃ見逃しちゃうね」（神速で抜ける）", auraCost: 60, next: "scene_king1" },
+                    { text: "「俺が3人分になる」（陽動）", hpCost: 50, auraCost: 20, next: "scene_king1" },
+                    { text: "「あいつワシより強くね？」（強行突破）", hpCost: 80, next: "scene_king1" }
+                ]
+            },
+
+            // --- Phase 6: 最終決戦 ---
+            scene_king1: {
+                text: "ついに王の間にたどり着いた。\n\nメルエム「盤上この一手……か」\n王の覇気が空間を歪める。一歩でも動けば首が飛ぶ。",
+                choices: [
+                    { text: "「そりゃ悪手だろ」", auraCost: 30, next: "scene_king2" },
+                    { text: "「品性は金で買えないよ」（挑発する）", hpCost: 40, next: "scene_king2" }
+                ]
+            },
+            scene_king2: {
+                text: "メルエム「貴様らは、豚や牛の命乞いに耳を貸したことがあるか？」\n\n生物としての格の違いを見せつけられる。\nそこに、空から黄金の百式観音が降り立った！\n\nネテロ「あいつワシより強くね？」",
+                choices: [
+                    { text: "「感謝するぜ お前と出会えた これまでの全てに!!!」", auraCost: 60, next: "scene_king3" },
+                    { text: "「祈りとは 心の所作」", auraCost: 40, next: "scene_king3" },
+                    { text: "「沈黙！」（ただ圧倒されて立ち尽くす）", hpCost: 50, next: "scene_king3" }
+                ]
+            },
+            scene_king3: {
+                text: "ネテロ「次が最後じゃ。ありったけをぶつけるぜ」\n\n王と会長の激突。巻き込まれれば塵一つ残らない。\n最後の選択だ。",
+                choices: [
+                    { text: "「もうこれで終わってもいい。だからありったけを」", auraCost: 80, hpCost: 80, next: "true_end" },
+                    { text: "「死後強まる念…!!」", hpCost: 99, next: "true_end" }
+                ]
+            },
+            true_end: {
+                text: "<span class='true-end'>【TRUE END：偉大なる道草】</span>\n\nあなたは理不尽なハンターの世界を生き抜いた。\n数々の死闘を越え、限界まで絞り出したオーラと命。\n\nジン「道草を楽しめ 大いにな。ほしいものより大切なものが きっとそっちに転がってる」\n\nゲームクリア！本当におめでとう！",
+                choices: [{ text: "もう一度遊ぶ", next: "reset" }]
+            },
+
+            // --- 汎用死亡シーン ---
+            death_hp: {
+                text: "<span class='game-over'>【GAME OVER：体力が尽きた…】</span>\n\n激しい戦いの末、あなたの命の灯火は消えた。\n無理な選択が命取りとなったようだ。\n\n「もうこれで終わってもいい。だからありったけを」",
+                choices: [{ text: "最初からやり直す", next: "reset" }]
+            },
+            death_aura: {
+                text: "<span class='game-over'>【GAME OVER：オーラが枯渇した…】</span>\n\nオーラを使い果たし、『絶』の状態に陥ったところを狙われた。\n\nヒソカ「キミの敗因は容量（メモリ）のムダ使い❤︎」",
+                choices: [{ text: "最初からやり直す", next: "reset" }]
+            }
+        };
+
+        function renderScene(sceneId) {
+            if (sceneId === "reset") {
+                resetGame();
+                return;
+            }
+
+            const scene = gameData[sceneId];
+            const textDisplay = document.getElementById('text-display');
+            const choicesContainer = document.getElementById('choices-container');
+
+            textDisplay.innerHTML = scene.text.replace(/\n/g, '<br>');
+            choicesContainer.innerHTML = '';
+
+            // 安全策：選択肢が一つもない場合はエラー回避
+            if (!scene.choices || scene.choices.length === 0) return;
+
+            scene.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                
+                const costHp = choice.hpCost || 0;
+                const costAura = choice.auraCost || 0;
+                
+                // ★修正点★: HPが足りなくても選択自体は可能とする（選んだ結果HPが0になりGAME OVERになる）
+                // ただし「オーラ(念)」は技術の発動に必要なMPのようなものなので、足りないと選べない
+                const canAffordAura = (player.aura >= costAura);
+
+                // テキストとコスト表示
+                let btnHtml = choice.text;
+                let tags = [];
+                if (costHp > 0) tags.push(`<span class="log-hp">体力-${costHp}</span>`);
+                if (costAura > 0) tags.push(`<span class="log-aura">念-${costAura}</span>`);
+                if (choice.hpHeal > 0) tags.push(`<span style="color:#aaffaa">体力回復</span>`);
+                if (choice.auraHeal > 0) tags.push(`<span style="color:#aaffaa">念回復</span>`);
+                
+                if (tags.length > 0) {
+                    btnHtml += `<span class="cost-tag">${tags.join(' / ')}</span>`;
+                }
+                
+                btn.innerHTML = btnHtml;
+
+                // オーラが足りない場合のみグレーアウトして無効化する
+                // 特殊シーン（開始、死亡、クリアなど）は常に有効
+                if (!canAffordAura && sceneId !== 'start' && !sceneId.startsWith('bad_') && sceneId !== 'death_hp' && sceneId !== 'death_aura' && sceneId !== 'true_end') {
+                    btn.disabled = true;
+                } else {
+                    btn.onclick = () => {
+                        // コスト支払いと回復
+                        if (costHp > 0) modifyStat('hp', -costHp);
+                        if (costAura > 0) modifyStat('aura', -costAura);
+                        if (choice.hpHeal) modifyStat('hp', choice.hpHeal);
+                        if (choice.auraHeal) modifyStat('aura', choice.auraHeal);
+
+                        // 死亡判定
+                        if (player.hp <= 0 && sceneId !== 'death_hp' && !sceneId.startsWith('bad_') && sceneId !== 'true_end') {
+                            renderScene('death_hp');
+                        } else if (player.aura < 0 && sceneId !== 'death_aura' && !sceneId.startsWith('bad_') && sceneId !== 'true_end') {
+                            renderScene('death_aura');
+                        } else {
+                            renderScene(choice.next);
+                        }
+                    };
+                }
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        window.onload = resetGame;
+    </script>
+</body>
+</html>
