@@ -122,6 +122,12 @@
         従来のMkDocsが抱えていたコアアーキテクチャの限界や、大規模サイトにおけるビルド速度（スケーラビリティ）の課題を解決するため、コア部分をRust、インターフェース部分をPythonで再構築し、圧倒的なビルドパフォーマンスを実現しています。<br>
         実質的なMkDocsの正統後継ツールとして位置づけられており、既存の `mkdocs.yml` やMkDocsプラグインとの互換性も強力にサポートしているのが特徴です。
         </p>
+        <p><strong>AI向けサイトマップ `llms.txt` の自動生成：</strong><br>
+        Zensicalによるコンパイル時、通常のHTML群と同時に<strong><code>llms.txt</code></strong>というファイルも自動生成し、神眼DBのルートディレクトリに配置しています。<br>
+        <code>llms.txt</code> は、ChatGPTなどのLLM（大規模言語モデル）やAIエージェントに対して「このサイトの主要な構成や、優先的に読み込むべき重要なページはどこか」を案内するための、AI向けの標準化された道標（Markdownファイル）です。これにより、AIが余計なノイズを省き、神眼DBのナレッジグラフを極めて効率的にクローリング・把握できるよう最適化しています。<br>
+        <br>
+        👉 <a href="https://hunterhunter-fansite.pages.dev/hunterdata2/llms.txt" target="_blank">実際の <code>llms.txt</code> の内容はこちら</a>
+        </p>
 
         <h2>Markdown（OKF）ファイルの実例：ヒソカ＝モロウ</h2>
         <p>実際に神眼DBのOKF定義ファイル（本物のデータ）がどのような内容になっているか、「ヒソカ＝モロウ」の項目を例にご紹介します。</p>
