@@ -317,6 +317,28 @@
     .feature--momoze .feature-action span:last-child { border-color: rgba(255,51,102,.38); color: #ff3366; background: rgba(255,51,102,.08); }
     .feature--momoze:hover .feature-action { border-color: rgba(255,51,102,.65); background: rgba(255,51,102,.13); }
 
+    .feature--riders-high::before {
+      background:
+        linear-gradient(180deg, rgba(8,9,7,.08), rgba(8,9,7,.96) 78%),
+        radial-gradient(circle at 75% 25%, rgba(0,255,255,.24), transparent 13rem),
+        conic-gradient(from 150deg at 50% 50%, rgba(0,255,255,.05) 0 60deg, transparent 60deg 120deg, rgba(0,255,255,.02) 120deg 180deg, transparent 180deg),
+        linear-gradient(145deg, #0a1515, #0b0d0b 68%);
+      background-size: 100% 100%, 100% 100%, 40px 69px, 100% 100%;
+    }
+    .feature--riders-high::after {
+      position: absolute;
+      top: 36px;
+      right: 32px;
+      color: rgba(0,255,255,.15);
+      font: 900 64px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      content: "RIDER";
+    }
+    .feature--riders-high .feature-status { color: #00ffff; }
+    .feature--riders-high .feature-status::before { background: currentColor; box-shadow: 0 0 12px currentColor; }
+    .feature--riders-high .feature-action { border-color: rgba(0,255,255,.34); color: #c4e0e0; background: rgba(0,255,255,.08); }
+    .feature--riders-high .feature-action span:last-child { border-color: rgba(0,255,255,.38); color: #00ffff; background: rgba(0,255,255,.08); }
+    .feature--riders-high:hover .feature-action { border-color: rgba(0,255,255,.65); background: rgba(0,255,255,.13); }
+
     .feature-content { position: relative; z-index: 1; align-self: flex-end; width: 100%; padding: 28px; }
     .feature-number { position: absolute; top: 22px; left: 26px; z-index: 2; color: rgba(255,255,255,.26); font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
     .feature-status { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; color: var(--acid); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
@@ -543,6 +565,15 @@
             <h3>モモゼのヒマつぶし</h3>
             <p>「おヒマ？」「おヒマができたら 教えて？ ね？ ね？」モモゼの念獣の問いかけから始まる、名言だらけの理不尽な選択式アドベンチャーゲーム。</p>
             <div class="feature-action"><span>念獣の問いに答える</span><span aria-hidden="true">↗</span></div>
+          </div>
+        </a>
+        <a class="feature feature--riders-high" href="./RIDERS_HIGH/" target="_blank" rel="noopener noreferrer">
+          <span class="feature-number">INDEX 10</span>
+          <div class="feature-content">
+            <div class="feature-status">RACING GAME ONLINE</div>
+            <h3>ツボネの大和撫子七変化</h3>
+            <p>念能力を注ぐと超集中状態にパワーアップできるレースゲーム。ライダーズハイを駆使して回避せよ。</p>
+            <div class="feature-action"><span>乗物にオーラを注ぐ</span><span aria-hidden="true">↗</span></div>
           </div>
         </a>
       </div>

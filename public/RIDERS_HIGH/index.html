@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FJMHVLKN37"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FJMHVLKN37');
+    </script>
+    <title>Riders High</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: sans-serif; }
+        canvas { display: block; transition: filter 0.1s ease-out; }
+
+        body.overclock canvas {
+            filter: invert(1) hue-rotate(180deg) saturate(2) contrast(1.5);
+        }
+        
+        #ui {
+            position: absolute; top: 20px; left: 20px; color: #00ffff;
+            font-size: 24px; font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px #00ffff; z-index: 10; pointer-events: none;
+            display: none; /* 初期は非表示 */
+        }
+        #power-container { margin-top: 15px; font-size: 16px; }
+        #power-bar-bg {
+            width: 250px; height: 12px; background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #00ffff; margin-top: 5px;
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            position: relative;
+        }
+        #power-bar-threshold {
+            position: absolute; top: 0; left: 30%; width: 2px; height: 100%;
+            background-color: #ff0055;
+            z-index: 5;
+        }
+        #power-bar {
+            width: 100%; height: 100%; background: #00ffff;
+            box-shadow: 0 0 10px #00ffff; transition: width 0.1s linear, background-color 0.2s;
+        }
+        
+        #instructions {
+            position: absolute; bottom: 2vh; width: 96%; left: 2%;
+            height: 18vh;
+            display: none; /* 初期は非表示 */
+            justify-content: center; gap: 4%; align-items: stretch;
+            z-index: 10;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .control-group {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            color: #00ffff; text-shadow: 0 0 5px #00ffff; 
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0; 
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation; 
+            transition: background 0.1s;
+        }
+
+        #btn-left, #btn-right { width: 26%; max-width: none; }
+        #btn-overclock { width: 36%; max-width: none; }
+        
+        .control-group:active, .control-group.active {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .keys-container { display: flex; gap: 5px; }
+        .key-icon {
+            display: inline-block;
+            border: 2px solid #00ffff;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 14px;
+            font-weight: bold;
+            background: rgba(0, 255, 255, 0.15);
+            box-shadow: 0 0 5px #00ffff, inset 0 0 5px #00ffff;
+            text-align: center;
+        }
+        .key-wide { padding: 4px 15px; }
+        .control-desc {
+            font-size: 12px; font-weight: bold; letter-spacing: 1px; text-align: center;
+        }
+
+        #play-pause-btn {
+            position: absolute; top: 20px; right: 20px;
+            width: 50px; height: 50px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #00ffff;
+            border-radius: 50%;
+            color: #00ffff;
+            font-size: 24px;
+            display: none; /* 初期は非表示 */
+            justify-content: center; align-items: center;
+            cursor: pointer;
+            text-shadow: 0 0 10px #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            z-index: 20;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        #play-pause-btn:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        #game-over {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #ff0055; font-size: 48px; text-align: center;
+            text-shadow: 0 0 20px #ff0055; display: none; z-index: 20;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        
+        .game-over-sub {
+            font-size: 24px; color: #00ffff; text-shadow: 0 0 10px #00ffff;
+            margin-top: 20px;
+            opacity: 0; transition: opacity 0.5s, background 0.2s;
+            cursor: pointer;
+            border: 2px solid #00ffff; padding: 10px 20px; border-radius: 8px;
+            background: rgba(0, 255, 255, 0.1);
+            display: inline-block; width: 80%; max-width: 400px;
+            box-shadow: 0 0 10px rgba(0,255,255,0.5);
+        }
+        .game-over-sub:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px #00ffff;
+        }
+        
+        #crash-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ff0000; opacity: 0; pointer-events: none; z-index: 15;
+            mix-blend-mode: color-dodge;
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-10px, 10px) rotate(-1deg); }
+            20% { transform: translate(15px, -5px) rotate(2deg); }
+            30% { transform: translate(-15px, 15px) rotate(-2deg); }
+            40% { transform: translate(10px, -10px) rotate(1deg); }
+            50% { transform: translate(-5px, 5px) rotate(-1deg); }
+            60% { transform: translate(15px, 10px) rotate(2deg); }
+            70% { transform: translate(-10px, -15px) rotate(-2deg); }
+            80% { transform: translate(5px, 15px) rotate(1deg); }
+            90% { transform: translate(-15px, -5px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        body.crashed {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        /* トップメニューUI */
+        #menu-ui {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-end; /* 下部に寄せる */
+            padding-bottom: 2.5vh;
+            z-index: 30;
+            /* 背景のブラーや暗幕を削除して3Dロゴをクリアに見せる */
+        }
+        #sum-score-container {
+            width: 75%; max-width: 480px;
+            display: flex; justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+        #sum-score-display {
+            font-size: 22px; font-weight: bold; font-style: italic;
+            color: #00ffff; text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+        .stage-list {
+            list-style: none; padding: 0; margin: 0; width: 75%; max-width: 480px;
+            height: 50vh; /* 縮小版 */
+            display: flex; flex-direction: column; gap: 2vh; /* 均等な隙間 */
+        }
+        .stage-item {
+            flex: 1; /* 4つで均等に分割して同じ高さにする */
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 255, 255, 0.1); border: 2px solid #00ffff;
+            padding: 0 20px; border-radius: 8px;
+            color: #fff; font-family: 'Courier New', monospace; font-size: 20px;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 0 10px rgba(0,255,255,0.2);
+        }
+        .stage-item.locked {
+            border-color: #555; color: #555; background: rgba(0, 0, 0, 0.5);
+            cursor: not-allowed; box-shadow: none;
+        }
+        .stage-item:hover:not(.locked) {
+            background: rgba(0, 255, 255, 0.3); box-shadow: 0 0 20px #00ffff;
+        }
+        .stage-name { font-weight: bold; text-shadow: 0 0 5px #00ffff; display: flex; align-items: center; gap: 10px; }
+        .stage-item.locked .stage-name { text-shadow: none; }
+        .stage-highscore { color: #00ffff; text-shadow: 0 0 5px #00ffff; font-size: 16px; font-weight: bold; text-align: right; }
+        .stage-item.locked .stage-highscore { color: #aaa; text-shadow: none; }
+
+        #copyright {
+            margin-top: 1.5vh;
+            font-size: 11px;
+            color: #aaaaaa;
+        }
+        #copyright a {
+            color: #aaaaaa;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        #copyright a:hover {
+            color: #ffffff;
+        }
+        #reset-btn {
+            position: absolute; top: 20px; right: 20px;
+            font-size: 10px; color: #aaaaaa;
+            cursor: pointer; text-decoration: underline;
+            z-index: 100;
+        }
+        #reset-btn:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div id="crash-overlay"></div>
+    
+    <div id="play-pause-btn">⏸</div>
+
+    <!-- メニュー要素 -->
+    <div id="menu-ui">
+        <div id="sum-score-container">
+            <div id="sum-score-display">SUM-HI-SCORE: 0</div>
+        </div>
+        <ul class="stage-list" id="stage-list"></ul>
+        <div id="copyright">
+            &copy; 2026 <a href="https://hunterhunter-fansite.pages.dev/" target="_blank">hunterhunter-fansite.pages.dev</a>
+        </div>
+        <div id="reset-btn" onclick="resetHighScores()">RESET</div>
+    </div>
+
+    <!-- UI要素 -->
+    <div id="ui">
+        SCORE: <span id="score">0</span><br>
+        SPEED: <span id="speed">150</span> km/h<br>
+        
+        <div id="power-container">
+            <div>OVERCLOCK</div>
+            <div id="power-bar-bg">
+                <div id="power-bar-threshold"></div>
+                <div id="power-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over">
+        GAME OVER<br>
+        <div class="game-over-sub" id="btn-reboot">REBOOT SYSTEM (SPACE)</div>
+        <div class="game-over-sub" id="btn-exit" style="font-size: 18px; margin-top: 15px;">EXIT TO MENU (ESC)</div>
+    </div>
+
+    <div id="instructions">
+        <div class="control-group" id="btn-left">
+            <div class="keys-container">
+                <span class="key-icon">←</span>
+                <span class="key-icon">A</span>
+            </div>
+            <div class="control-desc">MOVE LEFT</div>
+        </div>
+        
+        <div class="control-group" id="btn-overclock">
+            <div class="keys-container">
+                <span class="key-icon">↓</span>
+                <span class="key-icon">S</span>
+                <span class="key-icon key-wide">SPACE</span>
+            </div>
+            <div class="control-desc">OVERCLOCK</div>
+        </div>
+        
+        <div class="control-group" id="btn-right">
+            <div class="keys-container">
+                <span class="key-icon">→</span>
+                <span class="key-icon">D</span>
+            </div>
+            <div class="control-desc">MOVE RIGHT</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // --- 状態管理 ---
+        let gameState = 'MENU'; // 'MENU', 'PLAYING', 'GAMEOVER'
+        let currentStageId = 1;
+        
+        let isPaused = false;
+        let canRestart = false;
+        let score = 0;
+        
+        let baseSpeed = 1.0; 
+        let speed = baseSpeed;
+        
+        const maxPower = 100;
+        let currentPower = maxPower;
+        let timeScale = 1.0;
+        let targetTimeScale = 1.0;
+        let isOverclockActive = false;
+        let guaranteedOverclockFrames = 0;
+        
+        // キー管理
+        const keys = { ArrowLeft: false, ArrowRight: false, a: false, d: false, Overclock: false };
+        
+        // UI要素
+        const menuUi = document.getElementById('menu-ui');
+        const stageList = document.getElementById('stage-list');
+        const inGameUi = document.getElementById('ui');
+        const instructions = document.getElementById('instructions');
+        const scoreEl = document.getElementById('score');
+        const speedEl = document.getElementById('speed');
+        const gameOverEl = document.getElementById('game-over');
+        const restartSubEl = document.getElementById('btn-reboot');
+        const exitSubEl = document.getElementById('btn-exit');
+        const powerBar = document.getElementById('power-bar');
+        const crashOverlay = document.getElementById('crash-overlay');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+
+        // タッチ操作用要素
+        const btnLeft = document.getElementById('btn-left');
+        const btnRight = document.getElementById('btn-right');
+        const btnOverclock = document.getElementById('btn-overclock');
+
+        // --- ステージ定義とローカルストレージ ---
+        const STAGES = [
+            { id: 1, name: 'LV.1 STANDARD', reqLabel: '', startSpeed: 1.0, uiBase: 150, scoreMult: 1, counts: { red: 7, blue: 0, green: 0, yellow: 0 } },
+            { id: 2, name: 'LV.2 ADVANCED', reqScore: 6000, reqLabel: 'REQ 6000 IN SUM-HI', startSpeed: 1.0, uiBase: 150, scoreMult: 2, counts: { red: 6, blue: 2, green: 0, yellow: 0 } },
+            { id: 3, name: 'LV.3 EXPERT', reqScore: 20000, reqLabel: 'REQ 20000 IN SUM-HI', startSpeed: 1.0, uiBase: 150, scoreMult: 4, counts: { red: 6, blue: 2, green: 2, yellow: 0 } },
+            { id: 4, name: 'LV.4 GOD', reqScore: 50000, reqLabel: 'REQ 50000 IN SUM-HI', startSpeed: 1.0, uiBase: 150, scoreMult: 8, counts: { red: 5, blue: 3, green: 2, yellow: 2 } }
+        ];
+
+        let stageConfig = STAGES[0];
+
+        function getHighScore(levelId) {
+            return parseInt(localStorage.getItem('rh_highscore_' + levelId)) || 0;
+        }
+
+        function saveHighScore(levelId, currentScore) {
+            const hs = getHighScore(levelId);
+            if (currentScore > hs) {
+                localStorage.setItem('rh_highscore_' + levelId, Math.floor(currentScore));
+            }
+        }
+
+        function getTotalHighScore() {
+            let total = 0;
+            STAGES.forEach(stage => {
+                total += getHighScore(stage.id);
+            });
+            return total;
+        }
+
+        function isUnlocked(index) {
+            if (index === 0) return true;
+            return getTotalHighScore() >= STAGES[index].reqScore;
+        }
+
+        function resetHighScores() {
+            if (confirm("Clear all HI-SCORE?")) {
+                STAGES.forEach(stage => {
+                    localStorage.removeItem('rh_highscore_' + stage.id);
+                });
+                updateMenu();
+                stageConfig = getHighestUnlockedStage();
+                baseSpeed = stageConfig.startSpeed;
+                initObstaclesForStage(stageConfig);
+            }
+        }
+
+        function getHighestUnlockedStage() {
+            let highest = STAGES[0];
+            for (let i = 0; i < STAGES.length; i++) {
+                if (isUnlocked(i)) {
+                    highest = STAGES[i];
+                }
+            }
+            return highest;
+        }
+
+        function updateMenu() {
+            const sumScore = getTotalHighScore();
+            document.getElementById('sum-score-display').innerText = `SUM-HI-SCORE: ${sumScore}`;
+            
+            stageList.innerHTML = '';
+            STAGES.forEach((stage, index) => {
+                const li = document.createElement('li');
+                li.className = 'stage-item';
+                const unlocked = isUnlocked(index);
+                if (!unlocked) li.classList.add('locked');
+                
+                const hs = getHighScore(stage.id);
+                
+                // 行の高さを揃えるため、ロック時はHI-SCORE部分にREQ情報を表示
+                li.innerHTML = `
+                    <div class="stage-name">${stage.name} ${unlocked ? '' : '🔒'}</div>
+                    <div class="stage-highscore">${unlocked ? 'HI-SCORE: ' + hs : stage.reqLabel}</div>
+                `;
+                
+                if (unlocked) {
+                    li.addEventListener('click', () => {
+                        startGame(stage.id);
+                    });
+                }
+                stageList.appendChild(li);
+            });
+        }
+
+        // --- Three.js セットアップ ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.015);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 7, 12);
+        camera.lookAt(0, 0, -20);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // --- 3D ロゴ生成 (ネオンCanvas) ---
+        let neonLogo;
+        function createNeonLogo() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 2048;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            
+            // 背景は透明または黒（AdditiveBlendingのため黒＝透明として機能）
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, 2048, 512);
+            
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // フォント設定（文字自体をさらに大きく）
+            ctx.font = 'italic 900 280px "Courier New", Courier, monospace';
+            
+            // 目に優しいソフトなネオングロー
+            ctx.shadowColor = '#00aaff';
+            ctx.shadowBlur = 40;
+            ctx.fillStyle = '#e0ffff';
+            ctx.fillText('RIDERS HIGH', 1024, 256);
+            
+            // 輪郭で形をはっきりさせる
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#00ffff';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#ffffff';
+            ctx.strokeText('RIDERS HIGH', 1024, 256);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const material = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                fog: false
+            });
+            
+            // 3D空間上のサイズもさらに拡大（1.4倍）
+            const geometry = new THREE.PlaneGeometry(70, 17.5);
+            neonLogo = new THREE.Mesh(geometry, material);
+            neonLogo.position.set(0, 16, -25);
+            scene.add(neonLogo);
+        }
+        createNeonLogo();
+
+        // 空間のグリッド（サイバーな地面）
+        const gridHelper = new THREE.GridHelper(200, 40, 0x00ffff, 0x004444);
+        gridHelper.position.y = 0;
+        gridHelper.position.z = -80; // 自機より過剰に後ろ（手前側）に伸びないようにシフト
+        scene.add(gridHelper);
+
+        // 両脇の壁（スピード感を出す）
+        const wallMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true });
+        const leftWallGeometry = new THREE.PlaneGeometry(400, 10, 80, 2);
+        const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
+        leftWall.position.set(-20, 5, -150); // 自機より後ろに伸びないようにシフト
+        leftWall.rotation.y = Math.PI / 2;
+        scene.add(leftWall);
+
+        const rightWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
+        rightWall.position.set(20, 5, -150);
+        rightWall.rotation.y = -Math.PI / 2;
+        scene.add(rightWall);
+
+        // --- プレイヤー機体（ワイヤーフレームの流線型ホバー） ---
+        const ship = new THREE.Group();
+
+        // 1. ベースとなる形
+        const shipGeo = new THREE.ConeGeometry(1.5, 6, 3);
+        shipGeo.rotateX(-Math.PI / 2);
+        
+        const edges = new THREE.EdgesGeometry(shipGeo);
+        const edgeMat = new THREE.LineBasicMaterial({ color: 0x00ffff, linewidth: 2 });
+        const shipLines = new THREE.LineSegments(edges, edgeMat);
+        shipLines.scale.set(1, 0.3, 1);
+        ship.add(shipLines);
+
+        // 2. 左右のウィング
+        const wingGeo = new THREE.ConeGeometry(1.6, 4, 3);
+        wingGeo.rotateX(-Math.PI / 2);
+        const wingEdges = new THREE.EdgesGeometry(wingGeo);
+        const wingLines = new THREE.LineSegments(wingEdges, edgeMat);
+        wingLines.position.set(0, 0, 1.5);
+        wingLines.scale.set(1, 0.1, 1);
+        ship.add(wingLines);
+
+        // 3. 内部のアクセントコア
+        const coreGeo = new THREE.ConeGeometry(0.5, 4, 3);
+        coreGeo.rotateX(-Math.PI / 2);
+        const coreEdges = new THREE.EdgesGeometry(coreGeo);
+        const coreMat = new THREE.LineBasicMaterial({ color: 0xff00ff });
+        const coreLines = new THREE.LineSegments(coreEdges, coreMat);
+        coreLines.position.z = 0.5;
+        coreLines.scale.set(1, 0.3, 1);
+        ship.add(coreLines);
+
+        // 4. 後部のスラスターリング
+        const ringGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.2, 6);
+        ringGeo.rotateX(Math.PI / 2);
+        const ringEdges = new THREE.EdgesGeometry(ringGeo);
+        const ringLines = new THREE.LineSegments(ringEdges, edgeMat);
+        ringLines.position.set(0, 0, 3.0);
+        ship.add(ringLines);
+
+        // エンジン発光
+        const engineLight = new THREE.PointLight(0x00ffff, 4, 15);
+        engineLight.position.set(0, 0, 3.5);
+        ship.add(engineLight);
+
+        ship.position.y = 1.5;
+        scene.add(ship);
+
+        // --- 障害物（レベル別のブロック） ---
+        let obstacles = [];
+        const geoRed = new THREE.BoxGeometry(3, 3, 3);
+        const matRed = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0x330000, metalness: 0.5, roughness: 0.2 });
+        
+        const geoBlue = new THREE.BoxGeometry(4.5, 3, 3);
+        const matBlue = new THREE.MeshStandardMaterial({ color: 0x0055ff, emissive: 0x001133, metalness: 0.5, roughness: 0.2 });
+        
+        const geoGreen = new THREE.IcosahedronGeometry(1.2, 1);
+        const matGreen = new THREE.MeshStandardMaterial({ color: 0x00ff00, emissive: 0x003300, metalness: 0.5, roughness: 0.2 });
+        
+        const geoYellow = new THREE.IcosahedronGeometry(1.8, 1);
+        const matYellow = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333300, metalness: 0.5, roughness: 0.2 });
+
+        function createObstacle(type) {
+            let mesh, radius, vx = 0;
+            if (type === 'red') {
+                mesh = new THREE.Mesh(geoRed, matRed);
+                radius = 1.5;
+            } else if (type === 'blue') {
+                mesh = new THREE.Mesh(geoBlue, matBlue);
+                radius = 2.25;
+            } else if (type === 'green') {
+                mesh = new THREE.Mesh(geoGreen, matGreen);
+                radius = 1.2;
+                vx = (Math.random() > 0.5 ? 12 : -12);
+            } else if (type === 'yellow') {
+                mesh = new THREE.Mesh(geoYellow, matYellow);
+                radius = 1.8;
+                vx = (Math.random() > 0.5 ? 24 : -24);
+            }
+            
+            const edgeGeo = new THREE.EdgesGeometry(mesh.geometry);
+            const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 });
+            const edges = new THREE.LineSegments(edgeGeo, edgeMat);
+            mesh.add(edges);
+
+            mesh.position.z = -100 - Math.random() * 200;
+            let newX = (Math.random() - 0.5) * 36;
+            if (gameState === 'MENU') {
+                if (newX > -4 && newX < 4) newX = newX > 0 ? newX + 4 : newX - 4;
+            }
+            mesh.position.x = newX;
+            mesh.position.y = 1.5;
+            
+            mesh.userData = { type, radius, vx };
+            scene.add(mesh);
+            obstacles.push(mesh);
+        }
+
+        function initObstaclesForStage(config) {
+            obstacles.forEach(obs => scene.remove(obs));
+            obstacles = [];
+            for(let i=0; i<config.counts.red; i++) createObstacle('red');
+            for(let i=0; i<config.counts.blue; i++) createObstacle('blue');
+            for(let i=0; i<config.counts.green; i++) createObstacle('green');
+            for(let i=0; i<config.counts.yellow; i++) createObstacle('yellow');
+        }
+
+        // --- 背景のビル群（近未来都市のデータピラー） ---
+        const buildings = [];
+        const pillarGeo = new THREE.BoxGeometry(1, 1, 1);
+        const pillarEdgeMat = new THREE.LineBasicMaterial({ color: 0x0055aa, transparent: true, opacity: 0.5 });
+        
+        for(let i=0; i<150; i++) {
+            const group = new THREE.Group();
+            
+            const w = 3 + Math.random() * 8;
+            const h = 20 + Math.random() * 120;
+            const d = 3 + Math.random() * 8;
+            
+            const edgesGeo = new THREE.EdgesGeometry(pillarGeo);
+            const edges = new THREE.LineSegments(edgesGeo, pillarEdgeMat);
+            edges.scale.set(w, h, d);
+            edges.position.y = h / 2 - 5;
+            group.add(edges);
+            
+            const side = Math.random() > 0.5 ? 1 : -1;
+            const x = side * (25 + Math.random() * 150);
+            const z = -400 + Math.random() * 500;
+            group.position.set(x, 0, z);
+            
+            scene.add(group);
+            buildings.push(group);
+        }
+
+        // --- パーティクル ---
+        const particleCount = 1000;
+        const pGeo = new THREE.BufferGeometry();
+        const pMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2, transparent: true, opacity: 0.8 });
+        const pPositions = new Float32Array(particleCount * 3);
+        
+        for(let i=0; i<particleCount; i++) {
+            pPositions[i*3] = (Math.random() - 0.5) * 200;
+            pPositions[i*3+1] = Math.random() * 50;
+            pPositions[i*3+2] = (Math.random() - 0.5) * 200;
+        }
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+        const particles = new THREE.Points(pGeo, pMat);
+        scene.add(particles);
+
+        // 環境光とディレクショナルライト
+        const ambientLight = new THREE.AmbientLight(0x404040, 2);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        // --- ゲームフロー管理 ---
+
+        function showMenu() {
+            gameState = 'MENU';
+            menuUi.style.display = 'flex';
+            inGameUi.style.display = 'none';
+            instructions.style.display = 'none';
+            playPauseBtn.style.display = 'none';
+            gameOverEl.style.display = 'none';
+            document.body.classList.remove('crashed');
+            crashOverlay.style.opacity = '0';
+            
+            if (neonLogo) neonLogo.visible = true;
+            
+            ship.position.x = 0;
+            ship.rotation.z = 0;
+            isOverclockActive = false;
+            document.body.classList.remove('overclock');
+            keys.ArrowLeft = false; keys.ArrowRight = false; keys.Overclock = false;
+            
+            updateMenu();
+            stageConfig = getHighestUnlockedStage(); // 自分がプレイ可能な最高難易度をデモ表示
+            baseSpeed = stageConfig.startSpeed;
+            initObstaclesForStage(stageConfig);
+        }
+
+        function startGame(stageId) {
+            currentStageId = stageId;
+            gameState = 'PLAYING';
+            
+            menuUi.style.display = 'none';
+            inGameUi.style.display = 'block';
+            instructions.style.display = 'flex';
+            playPauseBtn.style.display = 'flex';
+            gameOverEl.style.display = 'none';
+            
+            score = 0;
+            speed = baseSpeed;
+            currentPower = maxPower;
+            isOverclockActive = false;
+            guaranteedOverclockFrames = 0;
+            canRestart = false;
+            
+            ship.position.x = 0;
+            ship.rotation.z = 0;
+            
+            stageConfig = STAGES.find(s => s.id === stageId);
+            baseSpeed = stageConfig.startSpeed;
+            speed = baseSpeed;
+            initObstaclesForStage(stageConfig);
+            
+            if (neonLogo) neonLogo.visible = false;
+        }
+
+        function restartGame() {
+            if (gameState !== 'GAMEOVER' || !canRestart) return;
+            startGame(currentStageId);
+        }
+
+        // --- イベントリスナ ---
+        
+        playPauseBtn.addEventListener('click', () => {
+            if (gameState !== 'PLAYING') return;
+            isPaused = !isPaused;
+            playPauseBtn.innerText = isPaused ? '▶' : '⏸';
+        });
+
+        restartSubEl.addEventListener('click', () => {
+            if (gameState === 'GAMEOVER' && canRestart) restartGame();
+        });
+        
+        exitSubEl.addEventListener('click', () => {
+            if (gameState === 'GAMEOVER' && canRestart) showMenu();
+        });
+
+        function bindTouchControl(element, actionTrue, actionFalse) {
+            const start = (e) => {
+                e.preventDefault();
+                element.classList.add('active');
+                actionTrue();
+            };
+            const end = (e) => {
+                e.preventDefault();
+                element.classList.remove('active');
+                actionFalse();
+            };
+            element.addEventListener('mousedown', start);
+            element.addEventListener('touchstart', start, {passive: false});
+            element.addEventListener('mouseup', end);
+            element.addEventListener('mouseleave', end);
+            element.addEventListener('touchend', end);
+            element.addEventListener('touchcancel', end);
+        }
+
+        bindTouchControl(btnLeft, () => keys.ArrowLeft = true, () => keys.ArrowLeft = false);
+        bindTouchControl(btnRight, () => keys.ArrowRight = true, () => keys.ArrowRight = false);
+        bindTouchControl(btnOverclock, () => keys.Overclock = true, () => keys.Overclock = false);
+
+        window.addEventListener('keydown', (e) => { 
+            if (gameState === 'PLAYING') {
+                if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.ArrowLeft = true;
+                if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.ArrowRight = true;
+                if(e.code === 'Space' || e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
+                    keys.Overclock = true;
+                }
+            } else if (gameState === 'GAMEOVER' && canRestart) {
+                if (e.code === 'Space') restartGame();
+                if (e.key === 'Escape') showMenu();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => { 
+            if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.ArrowLeft = false;
+            if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.ArrowRight = false;
+            if(e.code === 'Space' || e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
+                keys.Overclock = false;
+            }
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+
+            if (isPaused) return;
+
+            let effectiveSpeed = baseSpeed;
+            let playerDelta = delta;
+
+            if (gameState === 'PLAYING') {
+                // --- スローモーション ---
+                if (keys.Overclock) {
+                    if (!isOverclockActive && currentPower > 30) {
+                        isOverclockActive = true;
+                        currentPower -= 10.0;
+                        guaranteedOverclockFrames = 10;
+                    }
+                } else {
+                    if (guaranteedOverclockFrames <= 0) {
+                        isOverclockActive = false;
+                    }
+                }
+
+                if (isOverclockActive && currentPower > 0) {
+                    targetTimeScale = 0.05; 
+                    document.body.classList.add('overclock'); 
+                    if (guaranteedOverclockFrames > 0) {
+                        guaranteedOverclockFrames--;
+                    } else {
+                        currentPower -= 0.8;
+                    }
+                } else {
+                    isOverclockActive = false;
+                    guaranteedOverclockFrames = 0;
+                    targetTimeScale = 1.0; 
+                    currentPower += 0.3;   
+                    document.body.classList.remove('overclock'); 
+                }
+                
+                currentPower = Math.max(0, Math.min(maxPower, currentPower));
+                timeScale += (targetTimeScale - timeScale) * 0.15;
+
+                const powerPercent = (currentPower / maxPower) * 100;
+                powerBar.style.width = powerPercent + '%';
+                
+                if (currentPower < 30) {
+                    powerBar.style.backgroundColor = '#ff0055';
+                    powerBar.style.boxShadow = '0 0 10px #ff0055';
+                } else {
+                    powerBar.style.backgroundColor = '#00ffff';
+                    powerBar.style.boxShadow = '0 0 10px #00ffff';
+                }
+
+                effectiveSpeed = speed * timeScale;
+                const playerTimeScale = 1.0 - (1.0 - timeScale) * 0.4;
+                playerDelta = delta * playerTimeScale;
+
+                score += effectiveSpeed * stageConfig.scoreMult;
+                scoreEl.innerText = Math.floor(score);
+                speedEl.innerText = Math.floor(stageConfig.uiBase + (speed - baseSpeed) * 1000);
+
+                let turnSpeed = 0;
+                if (keys.ArrowLeft) turnSpeed = -30;
+                if (keys.ArrowRight) turnSpeed = 30;
+
+                ship.position.x += turnSpeed * playerDelta;
+                ship.position.x = Math.max(-18, Math.min(18, ship.position.x));
+
+                const targetRotationZ = -turnSpeed * 0.025;
+                ship.rotation.z += (targetRotationZ - ship.rotation.z) * 0.15;
+            } else if (gameState === 'GAMEOVER') {
+                // クラッシュ時は完全に停止する
+                effectiveSpeed = 0;
+                timeScale = 0;
+            } else {
+                // MENU状態 (約600km/hの固定スピード)
+                effectiveSpeed = 1.45; // 約600km/hのスピード感
+                timeScale = 1.0;
+            }
+
+            // 機体のホバーアニメーション（常に）
+            ship.position.y = 1.5 + Math.sin(Date.now() * 0.005 * timeScale) * 0.15;
+            camera.position.x += (ship.position.x * 0.4 - camera.position.x) * 0.1;
+
+            if (neonLogo && neonLogo.visible) {
+                // 上下にゆっくりフワフワ浮遊
+                neonLogo.position.y = 16 + Math.sin(Date.now() * 0.002) * 0.8;
+                // 透明度を変化させて、やさしく明滅（パルス）させる
+                // ペースを約1/3(0.0013)に落とし、最大輝度も抑えつつ（最大0.75）、暗くなりすぎないようにする（最小0.55）
+                neonLogo.material.opacity = 0.65 + Math.sin(Date.now() * 0.0013) * 0.1;
+            }
+
+            // 環境のスクロール
+            gridHelper.position.z += effectiveSpeed;
+            if (gridHelper.position.z > -75) gridHelper.position.z = -80 + (gridHelper.position.z + 80) % 5;
+            
+            leftWall.position.z += effectiveSpeed;
+            if (leftWall.position.z > -145) leftWall.position.z = -150 + (leftWall.position.z + 150) % 5;
+            
+            rightWall.position.z += effectiveSpeed;
+            if (rightWall.position.z > -145) rightWall.position.z = -150 + (rightWall.position.z + 150) % 5;
+
+            const positions = pGeo.attributes.position.array;
+            for(let i=0; i<particleCount; i++) {
+                positions[i*3+2] += effectiveSpeed * 1.5;
+                if(positions[i*3+2] > 40) {
+                    positions[i*3+2] = -150;
+                    positions[i*3] = (Math.random() - 0.5) * 200;
+                }
+            }
+            pGeo.attributes.position.needsUpdate = true;
+
+            buildings.forEach(b => {
+                b.position.z += effectiveSpeed;
+                if (b.position.z > 50) {
+                    b.position.z = -400 - Math.random() * 100;
+                }
+            });
+
+            obstacles.forEach(obs => {
+                obs.position.z += effectiveSpeed;
+
+                if (gameState === 'PLAYING' || gameState === 'MENU') {
+                    if (obs.userData.vx !== 0) {
+                        obs.position.x += obs.userData.vx * delta * timeScale;
+                        
+                        // 壁バウンド
+                        if (obs.position.x > 18) {
+                            obs.position.x = 18;
+                            obs.userData.vx *= -1;
+                        } else if (obs.position.x < -18) {
+                            obs.position.x = -18;
+                            obs.userData.vx *= -1;
+                        }
+                        
+                        // 他の障害物との簡易バウンド
+                        for (let other of obstacles) {
+                            if (other === obs) continue;
+                            if (Math.abs(obs.position.z - other.position.z) < 4) {
+                                const dx = obs.position.x - other.position.x;
+                                const dist = Math.abs(dx);
+                                const minDist = obs.userData.radius + other.userData.radius;
+                                if (dist < minDist) {
+                                    obs.userData.vx *= -1;
+                                    obs.position.x += Math.sign(dx) * 0.5;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (gameState === 'PLAYING') {
+                    const dx = obs.position.x - ship.position.x;
+                    const dz = obs.position.z - ship.position.z;
+                    const distance = Math.sqrt(dx*dx + dz*dz);
+                    
+                    const collisionThreshold = obs.userData.radius + 0.8;
+                    
+                    if (distance < collisionThreshold) {
+                        gameState = 'GAMEOVER';
+                        saveHighScore(currentStageId, score);
+                        
+                        document.body.classList.remove('overclock');
+                        keys.Overclock = false;
+                        
+                        document.body.classList.add('crashed');
+                        crashOverlay.style.transition = 'none';
+                        crashOverlay.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            crashOverlay.style.transition = 'opacity 2s ease-out';
+                            crashOverlay.style.opacity = '0';
+                        }, 50);
+
+                        restartSubEl.style.opacity = '0';
+                        exitSubEl.style.opacity = '0';
+                        gameOverEl.style.display = 'block';
+                        
+                        setTimeout(() => {
+                            canRestart = true;
+                            restartSubEl.style.opacity = '1';
+                            exitSubEl.style.opacity = '1';
+                        }, 3000);
+                    }
+                }
+
+                if (obs.position.z > 2) {
+                    obs.position.z = -200 - Math.random() * 100;
+                    
+                    let newX = (Math.random() - 0.5) * 36;
+                    if (gameState === 'MENU') {
+                        if (newX > -4 && newX < 4) newX = newX > 0 ? newX + 4 : newX - 4;
+                    }
+                    obs.position.x = newX;
+                    
+                    if (gameState === 'PLAYING') speed += 0.0065; 
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // アプリケーション開始
+        showMenu();
+        animate();
+
+    </script>
+</body>
+</html>
